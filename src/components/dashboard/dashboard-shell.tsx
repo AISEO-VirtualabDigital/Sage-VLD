@@ -13,6 +13,7 @@ import {
   BarChart3,
   KeyRound,
   CreditCard,
+  Wrench,
   ArrowLeft,
   Menu,
   X,
@@ -33,6 +34,7 @@ export type ViewId =
   | "changes"
   | "brandbrain"
   | "analytics"
+  | "manual"
   | "billing"
   | "apikeys";
 
@@ -45,6 +47,7 @@ const navItems: Array<{ id: ViewId; label: string; icon: typeof LayoutDashboard 
   { id: "changes", label: "Version Control", icon: GitBranch },
   { id: "brandbrain", label: "Brand Brain", icon: Brain },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
+  { id: "manual", label: "Manual Tools", icon: Wrench },
   { id: "billing", label: "Billing", icon: CreditCard },
   { id: "apikeys", label: "API & MCP", icon: KeyRound },
 ];

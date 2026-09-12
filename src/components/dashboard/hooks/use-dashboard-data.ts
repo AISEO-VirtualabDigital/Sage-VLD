@@ -282,3 +282,93 @@ export function useLlmsTxt(siteId: string | null) {
     enabled: !!siteId,
   });
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Manual Tools (Phase 4)
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ─── Meta Editor ────────────────────────────────────────────────────────────
+
+export function useMetaList(siteId: string | null) {
+  return useQuery({
+    queryKey: ["meta-list", siteId],
+    queryFn: async () => {
+      if (!siteId) return [];
+      const r = await callTool<{ items: Array<Record<string, unknown>> }>("sage.meta.list", { siteId });
+      return r.items;
+    },
+    enabled: !!siteId,
+  });
+}
+
+export function useMetaEdit() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (vars: Record<string, unknown>) => callTool("sage.meta.edit", vars),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["meta-list"] }),
+  });
+}
+
+// ─── Redirects ──────────────────────────────────────────────────────────────
+
+export function useRedirectList(siteId: string | null) {
+  return useQuery({
+    queryKey: ["redirect-list", siteId],
+    queryFn: async () => {
+      if (!siteId) return [];
+      const r = await callTool<{ items: Array<Record<string, unknown>> }>("sage.redirect.list", { siteId });
+      return r.items;
+    },
+    enabled: !!siteId,
+  });
+}
+
+export function useRedirectCreate() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (vars: Record<string, unknown>) => callTool("sage.redirect.create", vars),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["redirect-list"] }),
+  });
+}
+
+export function useRedirectDelete() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (vars: Record<string, unknown>) => callTool("sage.redirect.delete", vars),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["redirect-list"] }),
+  });
+}
+
+export function useMonitor404(siteId: string | null) {
+  return useQuery({
+    queryKey: ["monitor-404", siteId],
+    queryFn: async () => {
+      if (!siteId) return [];
+      const r = await callTool<{ items: Array<Record<string, unknown>> }>("sage.monitor.404", { siteId });
+      return r.items;
+    },
+    enabled: !!siteId,
+  });
+}
+
+// ─── Bot Blocker ────────────────────────────────────────────────────────────
+
+export function useBotBlockerList(siteId: string | null) {
+  return useQuery({
+    queryKey: ["bot-blocker", siteId],
+    queryFn: async () => {
+      if (!siteId) return null;
+      return callTool("sage.bot.blocker.list", { siteId });
+    },
+    enabled: !!siteId,
+  });
+}
+
+export function useBotBlockerSet() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (vars: { siteId: string; botName: string; action: "block" | "allow" }) =>
+      callTool("sage.bot.blocker.set", vars),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["bot-blocker"] }),
+  });
+}
