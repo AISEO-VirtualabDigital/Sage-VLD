@@ -1,8 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Sage by VirtuaLab Digital — Prisma schema
+// Local dev: SQLite (D1-equivalent). Production: Cloudflare D1 via @cloudflare/next-on-pages.
+// Schema is portable 1:1 — same Prisma client, same SQL dialect (SQLite).
 
 generator client {
   provider = "prisma-client-js"
@@ -13,20 +11,234 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ─── Identity ────────────────────────────────────────────────────────────────
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
   name      String?
+  image     String?
+  role      String   @default("user") // user|admin
+  byokDataForseoKey String? // encrypted at rest in prod
+  byokLlmProvider   String? // openai|anthropic|groq|...
+  byokLlmKey        String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  accounts Account[]
+  sites    Site[]
 }
 
-model Post {
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+// ─── Sites ───────────────────────────────────────────────────────────────────
+
+model Site {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url               String
+  name              String
+  verified          Boolean  @default(false)
+  verificationToken String?
+  cmsType           String?  // wordpress|shopify|webflow|nextjs|astro|html|unknown
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  brandBrain  BrandBrain?
+  keywords    Keyword[]
+  contentDrafts ContentDraft[]
+  auditRuns   AuditRun[]
+  citations   Citation[]
+  changes     Change[]
+  competitors Competitor[]
+
+  @@index([userId])
+}
+
+// ─── Keywords + Rankings (Google + Bing dual-core) ───────────────────────────
+
+model Keyword {
   id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
+  siteId    String
+  site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  term      String
+  intent    String   // informational|navigational|transactional|commercial
+  cluster   String?  // topic cluster id (TF-IDF + K-means output)
+  country   String   @default("us")
+  device    String   @default("desktop") // desktop|mobile
+  volume    Int?     // monthly search volume
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  rankings Ranking[]
+
+  @@index([siteId])
+  @@index([term])
+}
+
+model Ranking {
+  id         String   @id @default(cuid())
+  keywordId  String
+  keyword    Keyword  @relation(fields: [keywordId], references: [id], onDelete: Cascade)
+  engine     String   // google|bing
+  position   Int      // 1–100, 0 = not ranking
+  serpFeatures String? // JSON array: ["featured_snippet","people_also_ask",...]
+  checkedAt  DateTime @default(now())
+
+  @@index([keywordId, engine, checkedAt])
+}
+
+// ─── Content Drafts (Home / Services / Blog) ────────────────────────────────
+
+model ContentDraft {
+  id            String   @id @default(cuid())
+  siteId        String
+  site          Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  type          String   // home|services|blog
+  title         String
+  slug          String?
+  body          String
+  eeatScore     Int?     // 0–100
+  seoScore      Int?     // 0–100
+  gapScore      Int?     // 0–100 (content gap vs top 10 SERPs)
+  humanized     Boolean  @default(false)
+  brandBrainId  String?
+  status        String   @default("draft") // draft|reviewing|published|archived
+  version       Int      @default(1)
+  publishedUrl  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([siteId, type])
+}
+
+// ─── Audit Engine (358-point) ───────────────────────────────────────────────
+
+model AuditRun {
+  id           String    @id @default(cuid())
+  siteId       String
+  site         Site      @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  score        Int       // 0–100
+  pagesCrawled Int
+  status       String    @default("running") // running|completed|failed
+  startedAt    DateTime  @default(now())
+  completedAt  DateTime?
+
+  findings AuditFinding[]
+
+  @@index([siteId, startedAt])
+}
+
+model AuditFinding {
+  id              String   @id @default(cuid())
+  auditRunId      String
+  auditRun        AuditRun @relation(fields: [auditRunId], references: [id], onDelete: Cascade)
+  category        String   // cwv|broken-links|duplicate-content|schema|meta|render|indexability
+  severity        String   // pass|warn|fail
+  label           String
+  pageCount       Int      @default(0)
+  urls            String?  // JSON array of impacted URLs (capped at 50)
+  autoFixAvailable Boolean @default(false)
+
+  @@index([auditRunId, severity])
+}
+
+// ─── AI Citations (GEO) ──────────────────────────────────────────────────────
+
+model Citation {
+  id              String   @id @default(cuid())
+  siteId          String
+  site            Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  engine          String   // chatgpt|perplexity|google-aio|searchgpt|claude
+  query           String
+  cited           Boolean  @default(false)
+  citationText    String?
+  citationUrl     String?
+  competitorCited String?  // domain of competitor who got cited instead
+  checkedAt       DateTime @default(now())
+
+  @@index([siteId, engine, checkedAt])
+}
+
+// ─── Brand Brain (context repository) ───────────────────────────────────────
+
+model BrandBrain {
+  id            String   @id @default(cuid())
+  siteId        String   @unique
+  site          Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  voiceDoc      String?
+  styleGuide    String?
+  bannedPhrases String?  // JSON array
+  glossary      String?  // JSON object { term: definition }
+  internalLinkMap String? // JSON { source_url: [{target_url, anchor}] }
+  version       Int      @default(1)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  files BrandBrainFile[]
+}
+
+model BrandBrainFile {
+  id            String   @id @default(cuid())
+  brandBrainId  String
+  brandBrain    BrandBrain @relation(fields: [brandBrainId], references: [id], onDelete: Cascade)
+  filename      String
+  content       String
+  type          String   // voice|style|glossary|banned|linkmap|example
+  createdAt     DateTime @default(now())
+
+  @@index([brandBrainId])
+}
+
+// ─── SEO Version Control ────────────────────────────────────────────────────
+
+model Change {
+  id                  String   @id @default(cuid())
+  siteId              String
+  site                Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  url                 String
+  field               String   // title|meta-description|schema|redirect|content|h1|internal-link
+  before              String?
+  after               String?
+  impactRankingDelta  Int?     // change in avg position (negative = improvement)
+  impactTrafficDelta  Int?     // change in monthly organic clicks
+  rolledBack          Boolean  @default(false)
+  rolledBackAt        DateTime?
+  createdAt           DateTime @default(now())
+
+  @@index([siteId, url])
+  @@index([createdAt])
+}
+
+// ─── Competitors (for AI Battlecards) ───────────────────────────────────────
+
+model Competitor {
+  id              String   @id @default(cuid())
+  siteId          String
+  site            Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  domain          String
+  aiSovPercent    Int?     // AI share-of-voice %
+  googleSovPercent Int?
+  bingSovPercent  Int?
+  notes           String?
+  createdAt       DateTime @default(now())
+
+  @@index([siteId])
 }
