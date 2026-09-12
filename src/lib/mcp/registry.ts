@@ -8,8 +8,20 @@ import { makeJsonRpcError, makeJsonRpcResult } from "./types";
 import { readTools } from "./tools-read";
 import { writeTools } from "./tools-write";
 import { manualTools } from "./tools-manual";
+import { backlinkTools } from "./tools-backlinks";
+import { keywordResearchTools } from "./tools-keywords";
+import { competitorTools } from "./tools-competitors";
+import { serpFeatureTools } from "./tools-serp-features";
 
-export const tools: ToolDef[] = [...readTools, ...writeTools, ...manualTools];
+export const tools: ToolDef[] = [
+  ...readTools,
+  ...writeTools,
+  ...manualTools,
+  ...backlinkTools,
+  ...keywordResearchTools,
+  ...competitorTools,
+  ...serpFeatureTools,
+];
 
 export function getToolByName(name: string): ToolDef | undefined {
   return tools.find((t) => t.name === name);

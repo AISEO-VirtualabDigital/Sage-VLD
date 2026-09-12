@@ -87,6 +87,14 @@ model Site {
   monitor404s     Monitor404[]
   botBlockerRules BotBlockerRule[]
   indexNowSubmissions IndexNowSubmission[]
+  // Critical suites (Phase 5)
+  backlinks           Backlink[]
+  backlinkDomains     BacklinkDomain[]
+  disavowEntries      DisavowEntry[]
+  keywordResearch     KeywordResearch[]
+  keywordClusters     KeywordCluster[]
+  competitorDomains   CompetitorDomain[]
+  serpFeatureTracking SerpFeatureTracking[]
 
   @@index([userId])
 }
@@ -398,4 +406,127 @@ model IndexNowSubmission {
   submittedAt DateTime @default(now())
 
   @@index([siteId, submittedAt])
+}
+
+// ─── Backlinks Suite (Phase 5) ───────────────────────────────────────────────
+
+model Backlink {
+  id           String   @id @default(cuid())
+  siteId       String
+  site         Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  sourceUrl    String
+  sourceDomain String
+  targetUrl    String
+  anchorText   String
+  relAttribute String   @default("dofollow") // dofollow|nofollow|ugc|sponsored
+  domainAuthority Int?
+  pageAuthority  Int?
+  firstSeen    DateTime @default(now())
+  lastSeen     DateTime @default(now())
+  status       String   @default("active") // active|lost|toxic
+  toxicityScore Int?
+  lostAt       DateTime?
+  createdAt    DateTime @default(now())
+
+  @@index([siteId, sourceDomain])
+  @@index([siteId, status])
+}
+
+model BacklinkDomain {
+  id           String   @id @default(cuid())
+  siteId       String
+  site         Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  domain       String
+  domainAuthority Int?
+  totalBacklinks Int    @default(0)
+  totalReferringPages Int @default(0)
+  topAnchor   String?
+  lastChecked DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  @@unique([siteId, domain])
+  @@index([siteId])
+}
+
+model DisavowEntry {
+  id        String   @id @default(cuid())
+  siteId    String
+  site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  domain    String
+  reason    String   @default("toxic") // toxic|spam|paid|low-quality
+  createdAt DateTime @default(now())
+
+  @@unique([siteId, domain])
+}
+
+// ─── Keyword Research Suite (Phase 5) ───────────────────────────────────────
+
+model KeywordResearch {
+  id            String   @id @default(cuid())
+  siteId        String
+  site          Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  keyword       String
+  searchVolume  Int?
+  difficulty    Int?     // 0-100
+  cpc           Float?   // cost per click in USD
+  competition   Float?   // 0-1
+  intent        String?  // informational|commercial|transactional|navigational
+  trendData     String?  // JSON array of monthly volumes
+  relatedKeywords String? // JSON array
+  serpFeatures  String?  // JSON array of features present
+  createdAt     DateTime @default(now())
+
+  @@unique([siteId, keyword])
+  @@index([siteId])
+}
+
+model KeywordCluster {
+  id         String   @id @default(cuid())
+  siteId     String
+  site       Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  clusterName String
+  keywords   String   // JSON array of keyword terms
+  topicTheme String?
+  totalCount Int
+  createdAt  DateTime @default(now())
+
+  @@index([siteId])
+}
+
+// ─── Competitor Analysis Suite (Phase 5) ────────────────────────────────────
+
+model CompetitorDomain {
+  id              String   @id @default(cuid())
+  siteId          String
+  site            Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  domain          String
+  estimatedTraffic Int?
+  totalKeywords   Int?
+  totalBacklinks  Int?
+  domainAuthority Int?
+  topPages        String?  // JSON array
+  commonKeywords  String?  // JSON array of keywords both rank for
+  competitorOnlyKeywords String? // JSON
+  gapKeywords     String?  // JSON - keywords they rank for, you don't
+  lastAnalyzed    DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  @@unique([siteId, domain])
+  @@index([siteId])
+}
+
+model SerpFeatureTracking {
+  id           String   @id @default(cuid())
+  siteId       String
+  site         Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  keyword      String
+  feature      String   // featured_snippet|people_also_ask|image_pack|video_carousel|local_pack|shopping|news|sitelinks|top_stories|twitter
+  present      Boolean  @default(false)
+  yourPosition Int?
+  competitorPosition Int?
+  competitorDomain String?
+  checkedAt    DateTime @default(now())
+
+  @@index([siteId, keyword, feature])
+  @@index([siteId, checkedAt])
 }
