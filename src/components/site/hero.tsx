@@ -152,10 +152,10 @@ export function Hero() {
             className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-px overflow-hidden rounded-2xl border border-white/[0.06] glass max-w-3xl"
           >
             {[
-              { value: "Google + Bing", label: "Dual-core rank tracking" },
-              { value: "5 AI engines", label: "GEO citation monitoring" },
-              { value: "3 generators", label: "Home · Services · Blog" },
-              { value: "28 MCP tools", label: "Agent-native surface" },
+              { value: "208", label: "MCP tools" },
+              { value: "35", label: "Categories" },
+              { value: "5 AI engines", label: "GEO monitoring" },
+              { value: "BYOK", label: "Wholesale pricing" },
             ].map((stat, i) => (
               <div key={i} className="px-5 py-4 bg-white/[0.01] text-center sm:text-left">
                 <div className="text-base sm:text-lg font-display font-bold text-foreground leading-tight">

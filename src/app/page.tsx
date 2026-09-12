@@ -12,6 +12,7 @@ import { Testimonials } from "@/components/site/testimonials";
 import { FAQ } from "@/components/site/faq";
 import { FinalCTA } from "@/components/site/final-cta";
 import { Footer } from "@/components/site/footer";
+import { BlogList } from "@/components/blog/blog-list";
 import { DashboardApp } from "@/components/dashboard/dashboard-app";
 
 export default function Home() {
@@ -49,6 +50,7 @@ export default function Home() {
         <Pricing />
         <Testimonials />
         <FAQ />
+        <BlogList />
         <FinalCTA />
       </main>
 

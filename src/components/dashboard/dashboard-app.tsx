@@ -15,6 +15,7 @@ import { AnalyticsView } from "./views/analytics-view";
 import { ApiKeysView } from "./views/apikeys-view";
 import { BillingView } from "./views/billing-view";
 import { ManualToolsView } from "./views/manual-tools-view";
+import { BacklinksView, KeywordResearchView, CompetitorsView, SerpFeaturesView } from "./views/critical-suites-views";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -74,6 +75,10 @@ function DashboardInner({ onExit }: { onExit: () => void }) {
           {view === "changes" && <ChangesView siteId={siteId} />}
           {view === "brandbrain" && <BrandBrainView siteId={siteId} />}
           {view === "analytics" && <AnalyticsView siteId={siteId} />}
+          {view === "backlinks" && <BacklinksView siteId={siteId} />}
+          {view === "keywords" && <KeywordResearchView siteId={siteId} />}
+          {view === "competitors" && <CompetitorsView siteId={siteId} />}
+          {view === "serpfeatures" && <SerpFeaturesView siteId={siteId} />}
           {view === "manual" && <ManualToolsView siteId={siteId} />}
           {view === "billing" && <BillingView />}
           {view === "apikeys" && <ApiKeysView />}

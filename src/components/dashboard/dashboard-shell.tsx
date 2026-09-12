@@ -14,6 +14,10 @@ import {
   KeyRound,
   CreditCard,
   Wrench,
+  Link2,
+  Search,
+  Swords,
+  Target,
   ArrowLeft,
   Menu,
   X,
@@ -34,6 +38,10 @@ export type ViewId =
   | "changes"
   | "brandbrain"
   | "analytics"
+  | "backlinks"
+  | "keywords"
+  | "competitors"
+  | "serpfeatures"
   | "manual"
   | "billing"
   | "apikeys";
@@ -47,6 +55,10 @@ const navItems: Array<{ id: ViewId; label: string; icon: typeof LayoutDashboard 
   { id: "changes", label: "Version Control", icon: GitBranch },
   { id: "brandbrain", label: "Brand Brain", icon: Brain },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
+  { id: "backlinks", label: "Backlinks", icon: Link2 },
+  { id: "keywords", label: "Keyword Research", icon: Search },
+  { id: "competitors", label: "Competitors", icon: Swords },
+  { id: "serpfeatures", label: "SERP Features", icon: Target },
   { id: "manual", label: "Manual Tools", icon: Wrench },
   { id: "billing", label: "Billing", icon: CreditCard },
   { id: "apikeys", label: "API & MCP", icon: KeyRound },
