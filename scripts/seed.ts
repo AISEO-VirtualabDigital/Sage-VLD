@@ -30,12 +30,14 @@ async function main() {
       email: "demo@sage.virtualab.digital",
       name: "Demo User",
       role: "admin",
+      apiKey: "sage_live_demo_key_0000000000000000",
       byokDataForseoKey: "demo_dfseo_key_xxx",
       byokLlmProvider: "openai",
       byokLlmKey: "demo_openai_key_xxx",
     },
   });
   console.log(`  ✓ User: ${user.email}`);
+  console.log(`    API key: ${user.apiKey}`);
 
   // ─── Sites ─────────────────────────────────────────────────────────────
   const site1 = await db.site.create({

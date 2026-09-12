@@ -46,3 +46,42 @@ Stage Summary:
 - 5 tools operational: sage.sites.list, sage.keywords.list, sage.rankings.get, sage.citations.get, sage.audits.latest
 - Production deploy target: Cloudflare Pages via @cloudflare/next-on-pages + D1 binding
 - Phase 2 (write tools) ready to add: sage.audits.run, sage.content.generate, sage.changes.rollback, sage.brandbrain.update
+
+---
+Task ID: phase-2-mcp-28-tools
+Agent: Main (Sonnet)
+Task: Expand MCP server from 5 read-only tools to full 28-tool specification with write-actions + security (API key + write-guards).
+
+Work Log:
+- Added `apiKey` field to User schema (sage_live_<token> format), force-reset DB, re-seeded with demo key `sage_live_demo_key_0000000000000000`
+- Built auth layer at src/lib/mcp/auth.ts: `authenticate(req, mode)` resolves user from Bearer token; read mode allows demo fallback, write mode requires valid token; `requireSiteOwnership` verifies site belongs to user
+- Refactored tools.ts into 4 files: types.ts (shared types), tools-read.ts (5 read tools), tools-write.ts (23 new tools), registry.ts (combines + helpers)
+- Built content-pipeline.ts with real De-AI humanizer (strips em-dashes, filler phrases, banned marketing-speak) + E-E-A-T/SEO/Gap scorers (heuristic-based, 0-100 each)
+- Implemented all 28 tools across 8 categories:
+  - Site & Core (3): sites.list [R], sites.create [W], sites.delete [W]
+  - Keywords (4): keywords.list [R], rankings.get [R], keywords.add [W], rankings.refresh [W]
+  - Citations (3): citations.get [R], citations.battlecards [R], llmstxt.generate [R]
+  - Content (6): generate.homepage [W], generate.services [W], generate.blog [W], score [R], humanize [R], list [R]
+  - Audits (4): audits.latest [R], audits.run [W], links.internal [R], schema.generate [R]
+  - Version Control (3): changes.list [R], changes.rollback [W], changes.record [W]
+  - Brand Brain (3): brandbrain.get [R], brandbrain.update [W], brandbrain.files.add [W]
+  - Analytics (2): analytics.gsc [R], analytics.decay [R]
+- Updated all 3 API routes to enforce write-auth: POST /api/mcp (JSON-RPC), GET /api/mcp/tools (REST list), GET|POST /api/mcp/[tool] (REST call)
+- Write tools return 401 without Bearer token; JSON-RPC returns -32403 error code
+- Smoke tested all 28 tools: read tools work without auth (demo mode), write tools require + accept demo key
+- Verified content.generate.blog runs full pipeline: draft → humanize → score (E-E-A-T/SEO/Gap) → persist to ContentDraft
+- Verified changes.rollback: marks original as rolledBack + creates reverse change record
+- Verified sites.delete: refuses without confirm=true, cascades delete all related data with confirm=true
+- Verified keywords.add: auto-classifies intent + clusters, dedupes existing terms
+- Verified rankings.refresh: creates new Ranking records for Google + Bing across all site keywords
+- Verified brandbrain.update: increments version counter, partial updates supported
+- Lint clean, no console errors, browser-reachable, 28 tools registered via JSON-RPC tools/list
+
+Stage Summary:
+- Full 28-tool MCP server operational with auth + write-guards
+- 16 read tools (public/BYOK mode), 12 write tools (require Bearer sage_live_... token)
+- Content pipeline is real: De-AI humanizer strips em-dashes/filler/banned phrases, scorers compute E-E-A-T/SEO/Gap 0-100
+- All write tools persist to database (real writes, not mocks)
+- Demo API key: sage_live_demo_key_0000000000000000
+- MCP server speaks JSON-RPC 2.0 — compatible with Claude Desktop, Cursor, Cline, any MCP client
+- Production deploy: Cloudflare Pages + D1 binding via @cloudflare/next-on-pages
