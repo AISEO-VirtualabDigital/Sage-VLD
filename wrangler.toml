@@ -1,0 +1,58 @@
+# Sage by VirtuaLab Digital — Cloudflare Pages Configuration
+#
+# This file configures the Cloudflare Pages deployment for Sage.
+# It binds the D1 database, KV namespaces, and secrets to the Worker.
+#
+# Usage:
+#   npx wrangler pages deploy .next --project-name=sage-seo
+#   npx wrangler d1 execute sage-db --file=./prisma/migrations/d1_init.sql
+#
+# Docs: https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+
+name = "sage-seo"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+# ─── D1 Database Binding ────────────────────────────────────────────────────
+# The D1 database is bound as `env.DB` in Workers/Pages Functions.
+# Create it first: npx wrangler d1 create sage-db
+# Then paste the database_id below.
+
+[[d1_databases]]
+binding = "DB"
+database_name = "sage-db"
+database_id = "YOUR_D1_DATABASE_ID_HERE"  # ← Replace after `wrangler d1 create`
+migrations_dir = "prisma/migrations"
+
+# ─── KV Namespace for session/cache ─────────────────────────────────────────
+# Optional: used for rate-limiting + session storage at the edge.
+# Create: npx wrangler kv namespace create SAGE_KV
+
+[[kv_namespaces]]
+binding = "SAGE_KV"
+id = "YOUR_KV_NAMESPACE_ID_HERE"  # ← Replace after `wrangler kv namespace create`
+
+# ─── Environment Variables (non-secret) ─────────────────────────────────────
+# Secrets (API keys, Stripe secret key, NextAuth secret) should be set via:
+#   npx wrangler pages secret put SECRET_NAME --project-name=sage-seo
+
+[vars]
+NODE_ENV = "production"
+NEXTAUTH_URL = "https://sage.virtualab.digital"
+APP_URL = "https://sage.virtualab.digital"
+# Stripe publishable key (safe to expose)
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY = "pk_live_YOUR_STRIPE_PUBLISHABLE_KEY"
+
+# ─── Secrets (set via wrangler, NOT here) ───────────────────────────────────
+# Required secrets — set each with: npx wrangler pages secret put <NAME>
+#
+#   NEXTAUTH_SECRET              — random 32+ char string (openssl rand -base64 32)
+#   STRIPE_SECRET_KEY            — sk_live_... from Stripe dashboard
+#   STRIPE_WEBHOOK_SECRET        — whsec_... from Stripe webhook settings
+#   DATAFORSEO_LOGIN             — your DataForSEO API login
+#   DATAFORSEO_PASSWORD          — your DataForSEO API password
+#   OPENAI_API_KEY               — sk-... (for server-side LLM calls, BYOK bypasses)
+#   GOOGLE_CLIENT_ID             — for GSC/GA4 OAuth
+#   GOOGLE_CLIENT_SECRET         — for GSC/GA4 OAuth
+#   SAGE_ENCRYPTION_KEY          — 32-byte key for encrypting user BYOK keys at rest

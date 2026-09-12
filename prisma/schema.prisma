@@ -23,11 +23,22 @@ model User {
   byokDataForseoKey String? // encrypted at rest in prod
   byokLlmProvider   String? // openai|anthropic|groq|...
   byokLlmKey        String?
+  // ─── Billing (Lane 2) ────────────────────────────────────────────────
+  passwordHash      String?  // for credentials provider (null if OAuth-only)
+  plan              String   @default("free") // free|pro|agency
+  stripeCustomerId  String?  @unique
+  stripeSubscriptionId String?
+  subscriptionStatus String? // active|past_due|canceled|trialing
+  currentPeriodEnd  DateTime?
+  creditsBalanceCents Int   @default(0) // wholesale data credits in cents (1 credit = $0.01)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  accounts Account[]
-  sites    Site[]
+  accounts    Account[]
+  sites       Site[]
+  subscription Subscription?
+  creditLedger CreditLedger[]
+  invoices    Invoice[]
 }
 
 model Account {
@@ -242,4 +253,65 @@ model Competitor {
   createdAt       DateTime @default(now())
 
   @@index([siteId])
+}
+
+// ─── Billing & Subscriptions (Lane 2) ────────────────────────────────────────
+
+model Subscription {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeSubscriptionId String  @unique
+  stripePriceId       String
+  plan                String   // free|pro|agency
+  status              String   // active|past_due|canceled|trialing
+  interval            String   // month|year
+  currentPeriodStart  DateTime
+  currentPeriodEnd    DateTime
+  cancelAt            DateTime?
+  canceledAt          DateTime?
+  trialEnd            DateTime?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model CreditLedger {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        String   // credit|debit — credit = added to balance, debit = used
+  amountCents Int      // positive for credit, negative for debit
+  balanceAfterCents Int
+  reason      String   // stripe_payment|monthly_allocation|keyword_track|ai_citation_check|content_generate|audit_page|serp_lookup|backlink_lookup|schema_validate|content_gap
+  description String?
+  stripeInvoiceId String?
+  metadata    String?  // JSON: { siteId, keywordCount, engine, ... }
+  createdAt   DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([reason])
+}
+
+model Invoice {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeInvoiceId String   @unique
+  number          String?
+  amountDueCents  Int
+  amountPaidCents Int
+  currency        String   @default("usd")
+  status          String   // draft|open|paid|uncollectible|void
+  periodStart     DateTime
+  periodEnd       DateTime
+  paidAt          DateTime?
+  pdfUrl          String?
+  hostedUrl       String?
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+  @@index([status])
 }

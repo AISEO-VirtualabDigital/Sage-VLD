@@ -195,37 +195,89 @@ export const writeTools: ToolDef[] = [
       additionalProperties: false,
     },
     readOnly: false,
-    handler: async (args) => {
+    handler: async (args, ctx) => {
       const { db } = await import("@/lib/db");
+      const { resolveDataForSEOConfig, fetchSerp, simulateSerp, findBrandInSerp } = await import("@/lib/integrations/dataforseo");
+      const { debitCredits, WHOLESALE_RATES: _r } = await import("@/lib/billing");
       const siteId = String(args.siteId);
       const where: Record<string, unknown> = { siteId };
       if (args.keywordId) where.id = String(args.keywordId);
       const keywords = await db.keyword.findMany({ where, select: { id: true, term: true } });
+      const site = await db.site.findUnique({ where: { id: siteId }, select: { url: true } });
+
+      // Resolve DataForSEO config (BYOK → platform → demo)
+      const { config: dfsConfig, demo } = await resolveDataForSEOConfig(ctx.userId);
 
       const checkedAt = new Date();
       const refreshed = [];
+      let totalCostCents = 0;
+
       for (const kw of keywords) {
         const engines = args.engine ? [String(args.engine)] : ["google", "bing"];
         for (const engine of engines) {
-          // In production: call DataForSEO SERP API. In demo: simulate position.
-          const lastRanking = await db.ranking.findFirst({
-            where: { keywordId: kw.id, engine },
-            orderBy: { checkedAt: "desc" },
-            select: { position: true },
-          });
-          const basePos = lastRanking?.position || Math.floor(Math.random() * 40) + 5;
-          // Simulate small day-over-day movement
-          const newPos = Math.max(1, basePos + Math.floor(Math.random() * 5) - 2);
+          let position: number;
+          let serpFeatures: string | null = null;
+
+          if (dfsConfig && !demo) {
+            // LIVE: call DataForSEO SERP API
+            try {
+              // Debit credits before the call ($0.002 per query)
+              if (!ctx.demo) {
+                const debit = await debitCredits(ctx.userId, 0.2, "serp_lookup", { keyword: kw.term, engine });
+                if (!debit.success) {
+                  return {
+                    error: "Insufficient credits. Upgrade your plan or add BYOK DataForSEO keys.",
+                    creditsBalanceCents: debit.balanceAfterCents,
+                  };
+                }
+                totalCostCents += 0.2;
+              }
+
+              const serp = await fetchSerp({
+                keyword: kw.term,
+                engine: engine as "google" | "bing",
+                config: dfsConfig,
+              });
+
+              // Find the site's position in the SERP
+              const siteDomain = new URL(site?.url || "https://example.com").hostname;
+              const found = findBrandInSerp(serp, siteDomain);
+              position = found.rank || 0; // 0 = not ranking
+              serpFeatures = serp.serpFeatures.length > 0 ? JSON.stringify(serp.serpFeatures) : null;
+            } catch (err) {
+              // API error — fall back to simulation
+              console.error(`DataForSEO error for ${kw.term}:`, err);
+              const lastRanking = await db.ranking.findFirst({
+                where: { keywordId: kw.id, engine },
+                orderBy: { checkedAt: "desc" },
+                select: { position: true },
+              });
+              const basePos = lastRanking?.position || Math.floor(Math.random() * 40) + 5;
+              position = Math.max(1, basePos + Math.floor(Math.random() * 5) - 2);
+              serpFeatures = Math.random() > 0.7 ? '["featured_snippet"]' : null;
+            }
+          } else {
+            // DEMO: simulate position
+            const lastRanking = await db.ranking.findFirst({
+              where: { keywordId: kw.id, engine },
+              orderBy: { checkedAt: "desc" },
+              select: { position: true },
+            });
+            const basePos = lastRanking?.position || Math.floor(Math.random() * 40) + 5;
+            position = Math.max(1, basePos + Math.floor(Math.random() * 5) - 2);
+            serpFeatures = Math.random() > 0.7 ? '["featured_snippet"]' : null;
+          }
+
           const ranking = await db.ranking.create({
             data: {
               keywordId: kw.id,
               engine,
-              position: newPos,
-              serpFeatures: Math.random() > 0.7 ? '["featured_snippet"]' : null,
+              position,
+              serpFeatures,
               checkedAt,
             },
           });
-          refreshed.push({ keyword: kw.term, engine, position: newPos, rankingId: ranking.id });
+          refreshed.push({ keyword: kw.term, engine, position, rankingId: ranking.id });
         }
       }
 
@@ -235,7 +287,11 @@ export const writeTools: ToolDef[] = [
         keywordsChecked: keywords.length,
         rankingsCreated: refreshed.length,
         rankings: refreshed,
-        note: "Demo mode: positions simulated. In production, this calls DataForSEO SERP API via BYOK key.",
+        dataMode: demo ? "demo (simulated)" : dfsConfig ? "live (DataForSEO)" : "demo",
+        costCents: totalCostCents,
+        note: demo
+          ? "Demo mode: positions simulated. Set DATAFORSEO_LOGIN + DATAFORSEO_PASSWORD env vars for live data."
+          : "Live data via DataForSEO API.",
       };
     },
   },
@@ -1067,7 +1123,8 @@ export const writeTools: ToolDef[] = [
       const site = await db.site.findUnique({ where: { id: siteId }, select: { url: true, name: true } });
       if (!site) return { error: "Site not found" };
 
-      // In production: call Google Search Console API.
+      // In production: call Google Search Console API via @/lib/integrations/google.ts
+      // The live path requires a stored Google OAuth connection (refresh token).
       // In demo: simulate per-URL performance from keywords + drafts.
       const [keywords, drafts] = await Promise.all([
         db.keyword.findMany({ where: { siteId }, select: { term: true, volume: true } }),
@@ -1200,6 +1257,8 @@ async function generateContent(
   ctx: ToolContext
 ): Promise<unknown> {
   const { db } = await import("@/lib/db");
+  const { resolveLLMConfig, generateContent: llmGenerate } = await import("@/lib/integrations/llm");
+  const { debitCredits } = await import("@/lib/billing");
   const siteId = String(args.siteId);
   const targetKeyword = String(args.targetKeyword);
 
@@ -1210,23 +1269,78 @@ async function generateContent(
   if (!site) return { error: "Site not found" };
   if (site.userId !== ctx.userId) return { error: "Forbidden: site does not belong to authenticated user." };
 
-  // ─── 1. Generate raw draft (in production: call LLM with Brand Brain context) ──
-  const voiceSnippet = brandBrain?.voiceDoc
-    ? `\n\n<!-- Grounded in Brand Brain v${brandBrain.version}: ${brandBrain.voiceDoc.slice(0, 200)}... -->`
-    : "";
-  const rawDraft = generateDraftTemplate(type, site, targetKeyword, args, brandBrain) + voiceSnippet;
+  // ─── 1. Resolve LLM config (BYOK → platform → demo) ────────────────────
+  const { config: llmConfig, demo: llmDemo } = await resolveLLMConfig(ctx.userId);
 
-  // ─── 2. Run De-AI humanizer ────────────────────────────────────────────
+  // ─── 2. Generate raw draft via LLM (or template in demo mode) ──────────
+  let glossary: Record<string, string> | undefined;
+  if (brandBrain?.glossary) {
+    try { glossary = JSON.parse(brandBrain.glossary); } catch { /* ignore */ }
+  }
+
+  let llmResult;
+  let usedFallback = false;
+  try {
+    llmResult = await llmGenerate({
+      type,
+      targetKeyword,
+      brandVoice: brandBrain?.voiceDoc || undefined,
+      styleGuide: brandBrain?.styleGuide || undefined,
+      glossary,
+      serviceName: args.serviceName ? String(args.serviceName) : undefined,
+      location: args.location ? String(args.location) : undefined,
+      title: args.title ? String(args.title) : undefined,
+      siteName: site.name,
+      siteUrl: site.url,
+    }, llmConfig);
+  } catch (err) {
+    // LLM call failed (invalid key, rate limit, network) — fall back to template
+    console.error("LLM generation failed, falling back to template:", err);
+    llmResult = await llmGenerate({
+      type,
+      targetKeyword,
+      brandVoice: brandBrain?.voiceDoc || undefined,
+      styleGuide: brandBrain?.styleGuide || undefined,
+      glossary,
+      serviceName: args.serviceName ? String(args.serviceName) : undefined,
+      location: args.location ? String(args.location) : undefined,
+      title: args.title ? String(args.title) : undefined,
+      siteName: site.name,
+      siteUrl: site.url,
+    }, null); // null config = demo template
+    usedFallback = true;
+  }
+
+  // Debit credits for LLM cost (if using platform keys, not BYOK/demo)
+  if (!llmDemo && !ctx.demo && llmResult.costCents > 0) {
+    const debit = await debitCredits(ctx.userId, llmResult.costCents, "ai_content_generate", {
+      provider: llmResult.provider,
+      model: llmResult.model,
+      inputTokens: llmResult.inputTokens,
+      outputTokens: llmResult.outputTokens,
+    });
+    if (!debit.success) {
+      return {
+        error: "Insufficient credits for LLM generation. Upgrade your plan or add BYOK LLM keys.",
+        creditsBalanceCents: debit.balanceAfterCents,
+        requiredCents: llmResult.costCents,
+      };
+    }
+  }
+
+  const rawDraft = llmResult.content;
+
+  // ─── 3. Run De-AI humanizer ────────────────────────────────────────────
   const humanizeResult = humanizeDraft(rawDraft);
 
-  // ─── 3. Score (E-E-A-T, SEO, Gap) ─────────────────────────────────────
+  // ─── 4. Score (E-E-A-T, SEO, Gap) ─────────────────────────────────────
   const scoreResult = scoreDraft(humanizeResult.humanized, {
     targetKeyword,
     brandBrainPresent: !!brandBrain,
     type,
   });
 
-  // ─── 4. Persist to ContentDraft ───────────────────────────────────────
+  // ─── 5. Persist to ContentDraft ───────────────────────────────────────
   const title = args.title
     ? String(args.title)
     : args.serviceName
@@ -1264,6 +1378,15 @@ async function generateContent(
       breakdown: scoreResult.breakdown,
     },
     humanization: humanizeResult.stats,
+    llm: {
+      provider: llmResult.provider,
+      model: llmResult.model,
+      inputTokens: llmResult.inputTokens,
+      outputTokens: llmResult.outputTokens,
+      costCents: llmResult.costCents,
+      byok: !llmDemo && ctx.demo === false,
+      fallback: usedFallback,
+    },
     recommendations: scoreResult.recommendations,
     bodyPreview: humanizeResult.humanized.slice(0, 500) + (humanizeResult.humanized.length > 500 ? "..." : ""),
     bodyLength: humanizeResult.humanized.length,

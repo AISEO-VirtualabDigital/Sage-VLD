@@ -5,26 +5,27 @@
  *   1. READ mode (default): public/BYOK. Resolves userId if a bearer token
  *      is present, but does not require one. Used by all read-only tools.
  *   2. WRITE mode: requires `Authorization: Bearer sage_live_...`. Validates
- *      against User.apiKey. Mutative tools refuse to run without it.
+ *      against User.apiKey field. Mutative tools refuse to run without it.
  *
  * Site ownership:
  *   All tools that take a siteId verify the site belongs to the authenticated
  *   user. In demo mode (no auth + read tool), ownership is lenient — the first
  *   user's sites are returned. In write mode, ownership is strict.
+ *
+ * Plan-based gating (Lane 2):
+ *   Each tool can declare a `requiredPlan` ("free"|"pro"|"agency"). The auth
+ *   layer checks the user's plan before executing. Free users are blocked from
+ *   Pro/Agency-only tools.
  */
 import { NextRequest } from "next/server";
+import type { PlanId, PLANS } from "@/lib/auth";
 
 export type AuthResult =
-  | { ok: true; userId: string; apiKey: string; demo: boolean }
+  | { ok: true; userId: string; apiKey: string; demo: boolean; plan: PlanId }
   | { ok: false; error: string; code: number };
 
 export type AuthMode = "read" | "write";
 
-/**
- * Parse the Authorization header and resolve a user.
- * - Read mode: returns demo user if no token, real user if token present.
- * - Write mode: requires token, validates against User.apiKey.
- */
 export async function authenticate(
   req: NextRequest,
   mode: AuthMode
@@ -48,7 +49,7 @@ export async function authenticate(
     if (!demoUser) {
       return { ok: false, error: "No users in database. Run `bun run db:seed` first.", code: 500 };
     }
-    return { ok: true, userId: demoUser.id, apiKey: demoUser.apiKey, demo: true };
+    return { ok: true, userId: demoUser.id, apiKey: demoUser.apiKey, demo: true, plan: (demoUser.plan as PlanId) || "free" };
   }
 
   // Token present — validate
@@ -66,12 +67,17 @@ export async function authenticate(
     return { ok: false, error: "API key not recognized.", code: 401 };
   }
 
-  return { ok: true, userId: user.id, apiKey: user.apiKey, demo: false };
+  return {
+    ok: true,
+    userId: user.id,
+    apiKey: user.apiKey,
+    demo: false,
+    plan: (user.plan as PlanId) || "free",
+  };
 }
 
 /**
  * Verify that a site belongs to the authenticated user.
- * Throws AuthError if not.
  */
 export async function requireSiteOwnership(
   userId: string,
@@ -90,6 +96,15 @@ export async function requireSiteOwnership(
     };
   }
   return { ok: true };
+}
+
+/**
+ * Check if the user's plan meets the required plan level.
+ * Plan hierarchy: free < pro < agency
+ */
+export function hasPlanAccess(userPlan: PlanId, requiredPlan: PlanId): boolean {
+  const hierarchy: Record<PlanId, number> = { free: 0, pro: 1, agency: 2 };
+  return hierarchy[userPlan] >= hierarchy[requiredPlan];
 }
 
 function parseBearer(header: string | null): string | null {
