@@ -81,6 +81,12 @@ model Site {
   citations   Citation[]
   changes     Change[]
   competitors Competitor[]
+  // Manual tools (Phase 4)
+  metaRecords     MetaRecord[]
+  redirects       Redirect[]
+  monitor404s     Monitor404[]
+  botBlockerRules BotBlockerRule[]
+  indexNowSubmissions IndexNowSubmission[]
 
   @@index([userId])
 }
@@ -314,4 +320,82 @@ model Invoice {
 
   @@index([userId])
   @@index([status])
+}
+
+// ─── Manual SEO Tools (Phase 4) ──────────────────────────────────────────────
+
+model MetaRecord {
+  id              String   @id @default(cuid())
+  siteId          String
+  site            Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  url             String
+  title           String?
+  description     String?
+  canonicalUrl    String?
+  ogTitle         String?
+  ogDescription   String?
+  ogImage         String?
+  twitterCard     String?  // summary|summary_large_image|app|player
+  robotsMeta      String?  // noindex|nofollow|noarchive|nosnippet|max-snippet
+  updatedAt       DateTime @updatedAt
+  createdAt       DateTime @default(now())
+
+  @@unique([siteId, url])
+  @@index([siteId])
+}
+
+model Redirect {
+  id        String   @id @default(cuid())
+  siteId    String
+  site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  fromPath  String
+  toUrl     String
+  type      String   @default("301") // 301|302|307|308
+  status    String   @default("active") // active|disabled
+  hitCount  Int      @default(0)
+  lastHit   DateTime?
+  createdAt DateTime @default(now())
+
+  @@unique([siteId, fromPath])
+  @@index([siteId])
+}
+
+model Monitor404 {
+  id        String   @id @default(cuid())
+  siteId    String
+  site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  url       String
+  referrer  String?
+  hitCount  Int      @default(1)
+  lastHit   DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  @@unique([siteId, url])
+  @@index([siteId, lastHit])
+}
+
+model BotBlockerRule {
+  id        String   @id @default(cuid())
+  siteId    String
+  site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  botName   String   // GPTBot|CCBot|Google-Extended|anthropic-ai|ClaudeBot|PerplexityBot|...
+  action    String   @default("block") // block|allow
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@unique([siteId, botName])
+  @@index([siteId])
+}
+
+model IndexNowSubmission {
+  id          String   @id @default(cuid())
+  siteId      String
+  site        Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  url         String
+  searchEngine String  // bing|yandex|seznam|najdi
+  status      String   @default("submitted") // submitted|ok|error
+  responseCode Int?
+  submittedAt DateTime @default(now())
+
+  @@index([siteId, submittedAt])
 }

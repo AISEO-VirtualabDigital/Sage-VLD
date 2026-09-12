@@ -202,3 +202,33 @@ Stage Summary:
 - Lane 2: Hybrid billing operational (Subscription + CreditLedger + Invoice models, Stripe checkout/portal/webhook routes, plan-based gating, Billing dashboard view). Stripe keys set via wrangler secret in production.
 - Lane 3: Live integration layer with graceful fallback (DataForSEO/LLM/Google clients, BYOK priority, demo fallback, credit debit on live calls). Tools report dataMode + fallback status.
 - All 3 lanes verified via curl + browser. Local dev intact. Ready for production deployment.
+
+---
+Task ID: phase-4-manual-tools
+Agent: Main (Sonnet)
+Task: Add manual SEO tools that don't require AI — for practitioners who prefer hands-on control. User pointed out Sage went too AI-heavy and skipped manual tools present in Yoast/Rank Math/AIOSEO/SEO Machine.
+
+Work Log:
+- Added 5 new Prisma models: MetaRecord (per-URL meta), Redirect (301/302), Monitor404 (404 tracking), BotBlockerRule (AI crawler control), IndexNowSubmission (instant indexing)
+- Built tools-manual.ts with 31 manual SEO tools across 9 categories:
+  - Meta Editor (3): meta.get, meta.edit, meta.list
+  - Sitemap & Robots (4): sitemap.generate, robots.txt.generate, robots.txt.preview, sitemap.preview
+  - Redirect Manager (4): redirect.create, redirect.list, redirect.delete, monitor.404
+  - SERP Preview & Analyzers (6): serp.preview, headline.analyze, readability.analyze, keyword.density, featured.snippet.check, cannibalization.check
+  - Schema Generators (4): breadcrumbs.generate, author.schema, hreflang.generate, toc.generate
+  - Image SEO & PageSpeed (3): image.seo, pagespeed.check (live Google PSI API), local.seo
+  - AI Crawler Control (2): bot.blocker.list, bot.blocker.set
+  - Indexing & Bulk Ops (3): indexnow.submit, bulk.meta.export, bulk.meta.import
+  - Content Brief & SERP Analyzer (2): content.brief, serp.analyzer
+- Wired manual tools into MCP registry — total now 59 tools (28 AI/agent + 31 manual)
+- Tested: meta.edit (write), bot.blocker.set (write), serp.preview, headline.analyze, readability.analyze, keyword.density, sitemap.generate, robots.txt.generate, breadcrumbs.generate — all working
+- pagespeed.check uses live Google PageSpeed Insights API (no key needed)
+- robots.txt.generate includes AI crawler bot-blocker rules (GPTBot, CCBot, Google-Extended, etc.)
+- indexnow.submit generates verification key + submits to Bing/Yandex for instant indexing
+- Lint clean, all tools verified via curl
+
+Stage Summary:
+- Sage now has 59 MCP tools: 28 AI/agent + 31 manual
+- Manual tools cover: meta editing, redirects, sitemaps, robots.txt, SERP preview, headline analysis, readability, keyword density, breadcrumbs, author schema, hreflang, TOC, image SEO, PageSpeed, local SEO, AI crawler control, IndexNow, bulk CSV, content briefs, SERP analysis
+- Every tool works with or without AI — practitioners have full manual control
+- All tools exposed via MCP so agents can use them too (best of both worlds)

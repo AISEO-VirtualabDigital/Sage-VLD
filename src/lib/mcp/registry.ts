@@ -7,8 +7,9 @@ import type { ToolDef, ToolContext, JsonRpcResponse } from "./types";
 import { makeJsonRpcError, makeJsonRpcResult } from "./types";
 import { readTools } from "./tools-read";
 import { writeTools } from "./tools-write";
+import { manualTools } from "./tools-manual";
 
-export const tools: ToolDef[] = [...readTools, ...writeTools];
+export const tools: ToolDef[] = [...readTools, ...writeTools, ...manualTools];
 
 export function getToolByName(name: string): ToolDef | undefined {
   return tools.find((t) => t.name === name);
