@@ -85,3 +85,38 @@ Stage Summary:
 - Demo API key: sage_live_demo_key_0000000000000000
 - MCP server speaks JSON-RPC 2.0 — compatible with Claude Desktop, Cursor, Cline, any MCP client
 - Production deploy: Cloudflare Pages + D1 binding via @cloudflare/next-on-pages
+
+---
+Task ID: phase-3-dashboard-ui
+Agent: Main (Sonnet)
+Task: Build interactive Dashboard UI so humans can visually manage Google+Bing rankings, AI citation SOV, Brand Brain, and one-click SEO version control rollbacks. Agents continue to operate underneath via MCP.
+
+Work Log:
+- Built dashboard data layer: src/components/dashboard/api.ts (MCP REST client with auto-auth) + hooks/use-dashboard-data.ts (16 TanStack Query hooks wrapping every MCP tool)
+- Built DashboardShell with: left sidebar nav (9 views), topbar with site selector dropdown, mobile hamburger drawer, "Marketing site" exit button, API key indicator
+- Built 9 views:
+  1. Overview: 4 metric cards (audit score, AI SOV %, keyword count, draft count) + site health gauge + recent activity timeline + quick actions
+  2. Rankings: keyword list sidebar + Google/Bing dual-line trend chart + engine summary cards (current/best/delta) + add keywords form + refresh all button
+  3. AI Citations (GEO): overall SOV gauge + 5-engine breakdown cards with progress bars + competitive battlecards (our rate vs their win rate per engine) + llms.txt generator with copy button + recent citations log
+  4. Content: drafts grid with E-E-A-T/SEO/Gap score pills + generate content modal (3 types: home/services/blog) with live pipeline status
+  5. Audits: score gauge + summary stats (fail/warn/pass/auto-fix) + findings grouped by severity + run new audit button (write action)
+  6. Version Control: stats (total/rolled back/avg delta) + change timeline with before/after diffs + impact metrics + one-click rollback with confirm
+  7. Brand Brain: voice/style/banned/glossary editors + context file list + upload form + version indicator
+  8. Analytics: GSC summary cards + top pages table + content decay recommendations with priority badges
+  9. API & MCP: demo API key + MCP endpoint URL + Claude Desktop config snippet + full 28-tool list with READ/WRITE badges
+- Wired dashboard into page.tsx via ?view=app query param toggle (sandbox only allows / route)
+- Added "Dashboard" button to header (desktop + mobile menu) linking to /?view=app
+- Renamed marketing nav "Dashboard" to "Live Demo" to avoid anchor conflict
+- Fixed 3 bugs: (1) api.ts import path in hooks subdir, (2) QueryClientProvider wrapping (split DashboardApp into provider + inner), (3) mutation data access (callTool returns result directly, not wrapped)
+- Verified via Agent Browser: all 9 views render, site selector works, audit run write action completes end-to-end (button click → MCP call → DB persist → success message + refreshed findings), mobile responsive with hamburger drawer
+- Lint clean, no console errors
+
+Stage Summary:
+- Full dashboard UI operational at /?view=app
+- 9 views covering: Overview, Rankings, AI Citations, Content, Audits, Version Control, Brand Brain, Analytics, API Keys
+- All data fetched via MCP REST API (same path agents use) — dashboard is a thin client over the 28-tool MCP server
+- Write actions verified: Run Audit button creates AuditRun + AuditFinding records, success message displays
+- Site selector auto-picks Acme Labs (has full seed data)
+- Mobile responsive with hamburger drawer sidebar
+- "Dashboard" button in header toggles between marketing site and app
+- TanStack Query handles caching + invalidation (30s stale time, auto-refetch on mutations)

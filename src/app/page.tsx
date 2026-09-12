@@ -1,3 +1,7 @@
+"use client";
+
+import * as React from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Header } from "@/components/site/header";
 import { Hero } from "@/components/site/hero";
 import { Features } from "@/components/site/features";
@@ -8,8 +12,21 @@ import { Testimonials } from "@/components/site/testimonials";
 import { FAQ } from "@/components/site/faq";
 import { FinalCTA } from "@/components/site/final-cta";
 import { Footer } from "@/components/site/footer";
+import { DashboardApp } from "@/components/dashboard/dashboard-app";
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const isDashboard = searchParams.get("view") === "app";
+
+  const exitDashboard = React.useCallback(() => {
+    router.push("/");
+  }, [router]);
+
+  if (isDashboard) {
+    return <DashboardApp onExit={exitDashboard} />;
+  }
+
   return (
     <div className="relative min-h-screen flex flex-col bg-background">
       {/* Skip to content for accessibility */}

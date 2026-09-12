@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 const navLinks = [
   { label: "Features", href: "#features" },
   { label: "How it works", href: "#how-it-works" },
-  { label: "Dashboard", href: "#dashboard" },
+  { label: "Live Demo", href: "#dashboard" },
   { label: "Pricing", href: "#pricing" },
   { label: "Compare", href: "#compare" },
   { label: "FAQ", href: "#faq" },
@@ -56,6 +56,9 @@ export function Header() {
           </nav>
 
           <div className="hidden lg:flex items-center gap-2">
+            <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
+              <Link href="/?view=app">Dashboard</Link>
+            </Button>
             <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
               <Link href="#">Sign in</Link>
             </Button>
@@ -104,6 +107,9 @@ export function Header() {
                 </Link>
               ))}
               <div className="pt-3 mt-3 border-t border-white/[0.06] flex flex-col gap-2">
+                <Button variant="ghost" size="sm" asChild className="justify-start">
+                  <Link href="/?view=app" onClick={() => setMobileOpen(false)}>Dashboard</Link>
+                </Button>
                 <Button variant="ghost" size="sm" asChild className="justify-start">
                   <Link href="#" onClick={() => setMobileOpen(false)}>Sign in</Link>
                 </Button>
