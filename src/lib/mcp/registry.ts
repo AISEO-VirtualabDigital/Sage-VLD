@@ -12,6 +12,8 @@ import { backlinkTools } from "./tools-backlinks";
 import { keywordResearchTools } from "./tools-keywords";
 import { competitorTools } from "./tools-competitors";
 import { serpFeatureTools } from "./tools-serp-features";
+import { schemaTypeTools } from "./tools-schema-types";
+import { remainingTools } from "./tools-remaining";
 
 export const tools: ToolDef[] = [
   ...readTools,
@@ -21,6 +23,8 @@ export const tools: ToolDef[] = [
   ...keywordResearchTools,
   ...competitorTools,
   ...serpFeatureTools,
+  ...schemaTypeTools,
+  ...remainingTools,
 ];
 
 export function getToolByName(name: string): ToolDef | undefined {
