@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sage.virtualab.digital/sitemap.xml

@@ -1,0 +1,17 @@
+{
+  "name": "Sage by VirtuaLab Digital — AI-Native SEO Platform",
+  "short_name": "Sage",
+  "description": "The AI-native SEO platform that audits, optimizes, writes, and tracks — all powered by AI.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B1120",
+  "theme_color": "#0B1120",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
