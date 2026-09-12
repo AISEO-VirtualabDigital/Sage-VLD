@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Play, Star, TrendingUp, Bot, Zap } from "lucide-react";
+import { ArrowRight, Sparkles, Play, Star, Bot, Zap, KeyRound, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DashboardPreview } from "./dashboard-preview";
 
@@ -44,7 +44,7 @@ export function Hero() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
             </span>
-            New: AI Visibility / GEO tracking + MCP server is live
+            AI-Visibility-first · agent-native · built on Cloudflare Workers + D1
             <Link href="#features" className="inline-flex items-center gap-0.5 hover:text-emerald-200 transition-colors">
               <ArrowRight className="h-3 w-3" />
             </Link>
@@ -58,9 +58,8 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.05 }}
             className="mt-6 max-w-4xl text-balance text-4xl sm:text-5xl lg:text-7xl font-display font-bold tracking-tight text-foreground text-pretty"
           >
-            The AI-native{" "}
-            <span className="text-gradient-emerald text-glow">SEO platform</span>
-            <br className="hidden sm:block" /> built for the agentic web
+            Stop selling dashboards.{" "}
+            <span className="text-gradient-emerald text-glow">Start shipping rankings.</span>
           </motion.h1>
 
           {/* Subheadline */}
@@ -68,11 +67,12 @@ export function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mt-6 max-w-2xl text-balance text-base sm:text-lg lg:text-xl text-muted-foreground text-pretty"
+            className="mt-6 max-w-3xl text-balance text-base sm:text-lg lg:text-xl text-muted-foreground text-pretty"
           >
-            Sage audits your site, writes optimized content, generates schema, tracks AI-search
-            visibility (GEO), and ships technical fixes — automatically. Built by SEO engineers who
-            got tired of bloated WordPress plugins.
+            Meet <span className="font-semibold text-foreground">Sage</span> — the world's first
+            AI-Visibility-first, agent-native SEO platform. Track Google &amp; Bing, dominate AI
+            search (ChatGPT, Perplexity, AI Overviews), and let your AI assistant execute fixes
+            via a native MCP server.
           </motion.p>
 
           {/* CTAs */}
@@ -88,8 +88,8 @@ export function Hero() {
               className="group bg-emerald-500 text-emerald-950 hover:bg-emerald-400 font-semibold shadow-[0_0_40px_-8px] shadow-emerald-500/60 h-12 px-7"
             >
               <Link href="#pricing">
-                Start 14-day free trial
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                <KeyRound className="mr-2 h-4 w-4" />
+                Connect your first site — BYOK
               </Link>
             </Button>
             <Button
@@ -105,11 +105,22 @@ export function Hero() {
             </Button>
           </motion.div>
 
+          {/* BYOK tagline */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.18 }}
+            className="mt-3.5 text-xs text-emerald-300/90 font-medium inline-flex items-center gap-1.5"
+          >
+            <Activity className="h-3.5 w-3.5" />
+            Pay only for raw data costs. No bloated Ahrefs/Semrush markup.
+          </motion.div>
+
           {/* Trust line */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.22 }}
             className="mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground"
           >
             <div className="inline-flex items-center gap-1.5">
@@ -124,12 +135,12 @@ export function Hero() {
             <span className="hidden sm:inline text-white/10">|</span>
             <div className="inline-flex items-center gap-1.5">
               <Zap className="h-3.5 w-3.5 text-emerald-400" />
-              <span>No credit card required</span>
+              <span>14-day free trial · no card</span>
             </div>
             <span className="hidden sm:inline text-white/10">|</span>
             <div className="inline-flex items-center gap-1.5">
               <Bot className="h-3.5 w-3.5 text-emerald-400" />
-              <span>MCP & REST API included</span>
+              <span>MCP server + REST API</span>
             </div>
           </motion.div>
 
@@ -137,21 +148,20 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.25 }}
+            transition={{ duration: 0.5, delay: 0.26 }}
             className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-px overflow-hidden rounded-2xl border border-white/[0.06] glass max-w-3xl"
           >
             {[
-              { icon: TrendingUp, value: "10K+", label: "Sites optimized" },
-              { icon: Bot, value: "2.4M", label: "Keywords tracked" },
-              { icon: Sparkles, value: "1.8M", label: "AI articles shipped" },
-              { icon: Star, value: "4.9/5", label: "Customer rating" },
+              { value: "Google + Bing", label: "Dual-core rank tracking" },
+              { value: "5 AI engines", label: "GEO citation monitoring" },
+              { value: "3 generators", label: "Home · Services · Blog" },
+              { value: "28 MCP tools", label: "Agent-native surface" },
             ].map((stat, i) => (
-              <div key={i} className="px-5 py-4 bg-white/[0.01]">
-                <stat.icon className="h-4 w-4 text-emerald-400/80 mb-1.5" />
-                <div className="text-xl sm:text-2xl font-display font-bold text-foreground">
+              <div key={i} className="px-5 py-4 bg-white/[0.01] text-center sm:text-left">
+                <div className="text-base sm:text-lg font-display font-bold text-foreground leading-tight">
                   {stat.value}
                 </div>
-                <div className="text-xs text-muted-foreground">{stat.label}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{stat.label}</div>
               </div>
             ))}
           </motion.div>

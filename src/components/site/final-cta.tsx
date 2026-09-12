@@ -53,14 +53,14 @@ export function FinalCTA() {
             id="cta-heading"
             className="text-3xl sm:text-4xl lg:text-6xl font-display font-bold tracking-tight text-foreground text-balance text-pretty"
           >
-            Ship your first AI-optimized page{" "}
-            <span className="text-gradient-emerald text-glow">today</span>
+            Stop selling dashboards.{" "}
+            <span className="text-gradient-emerald text-glow">Start shipping rankings.</span>
           </h2>
 
           <p className="mt-5 max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground text-pretty">
-            Stop paying for 4 different SEO tools that don't talk to each other. Sage unifies
-            audits, AI content, schema, rank tracking, and AI-visibility into one workspace — and
-            one bill. Your future rankings will thank you.
+            Sage is the AI-Visibility-first, agent-native SEO platform. Track Google + Bing. Dominate
+            AI search. Let your agents run fixes via MCP. Pay wholesale data costs — no Ahrefs markup,
+            no per-feature upsells, no bloated WordPress plugins.
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -70,7 +70,7 @@ export function FinalCTA() {
               className="group bg-emerald-500 text-emerald-950 hover:bg-emerald-400 font-semibold shadow-[0_0_40px_-8px] shadow-emerald-500/60 h-12 px-7"
             >
               <Link href="#pricing">
-                Start your free trial
+                Connect your first site — BYOK
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </Button>
@@ -89,9 +89,9 @@ export function FinalCTA() {
           {/* Trust strip */}
           <div className="mt-10 pt-8 border-t border-white/[0.06] grid grid-cols-2 sm:grid-cols-4 gap-4 text-left">
             {[
-              "14-day free trial",
-              "No credit card required",
-              "Cancel anytime",
+              "Free BYOK tier forever",
+              "Google + Bing daily tracking",
+              "5 AI engines monitored",
               "MCP + REST API access",
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-2 text-xs text-muted-foreground">

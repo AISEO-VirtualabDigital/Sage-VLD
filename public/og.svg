@@ -27,20 +27,20 @@
   <text x="172" y="143" font-family="Inter, sans-serif" font-size="14" font-weight="500" fill="#6EE7B7" letter-spacing="0.5">by VirtuaLab Digital</text>
 
   <!-- Headline -->
-  <text x="80" y="280" font-family="Sora, sans-serif" font-size="68" font-weight="800" fill="#ECFDF5" letter-spacing="-2">The AI-Native</text>
-  <text x="80" y="360" font-family="Sora, sans-serif" font-size="68" font-weight="800" fill="url(#emerald-grad)" letter-spacing="-2">SEO Platform</text>
+  <text x="80" y="280" font-family="Sora, sans-serif" font-size="64" font-weight="800" fill="#ECFDF5" letter-spacing="-2">Stop selling dashboards.</text>
+  <text x="80" y="360" font-family="Sora, sans-serif" font-size="64" font-weight="800" fill="url(#emerald-grad)" letter-spacing="-2">Start shipping rankings.</text>
 
   <!-- Sub -->
-  <text x="80" y="420" font-family="Inter, sans-serif" font-size="24" font-weight="400" fill="#94A3B8">Audit · Optimize · Write · Track — all powered by AI.</text>
+  <text x="80" y="420" font-family="Inter, sans-serif" font-size="22" font-weight="400" fill="#94A3B8">AI-Visibility-first · agent-native SEO · BYOK · Cloudflare edge</text>
 
   <!-- Pills -->
   <g transform="translate(80, 470)">
     <rect width="180" height="42" rx="21" fill="#0F1A2E" stroke="url(#emerald-grad)" stroke-width="1"/>
-    <text x="90" y="27" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#6EE7B7">GEO / AI Visibility</text>
+    <text x="90" y="27" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#6EE7B7">Google + Bing</text>
   </g>
   <g transform="translate(280, 470)">
     <rect width="160" height="42" rx="21" fill="#0F1A2E" stroke="url(#emerald-grad)" stroke-width="1"/>
-    <text x="80" y="27" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#6EE7B7">AI Content</text>
+    <text x="80" y="27" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#6EE7B7">GEO · 5 AI engines</text>
   </g>
   <g transform="translate(460, 470)">
     <rect width="170" height="42" rx="21" fill="#0F1A2E" stroke="url(#emerald-grad)" stroke-width="1"/>
@@ -48,6 +48,6 @@
   </g>
   <g transform="translate(650, 470)">
     <rect width="150" height="42" rx="21" fill="#0F1A2E" stroke="url(#emerald-grad)" stroke-width="1"/>
-    <text x="75" y="27" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#6EE7B7">Rank Tracking</text>
+    <text x="75" y="27" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#6EE7B7">BYOK pricing</text>
   </g>
 </svg>

@@ -3,15 +3,20 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import {
-  Sparkles,
+  Search,
   Bot,
-  TrendingUp,
-  Code2,
-  FileSearch,
-  Link2,
-  Target,
+  Home,
+  Briefcase,
+  FileText,
+  Sparkles,
+  Brain,
+  GitBranch,
+  Swords,
   ShieldCheck,
+  Code2,
+  Link2,
   Plug,
+  BadgeCheck,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -25,75 +30,221 @@ interface Feature {
   featured?: boolean;
 }
 
-const features: Feature[] = [
+interface FeatureGroup {
+  id: string;
+  label: string;
+  title: string;
+  subtitle: string;
+  features: Feature[];
+}
+
+const groups: FeatureGroup[] = [
   {
-    icon: Sparkles,
-    title: "AI Content Generator",
-    description:
-      "Generate SEO-optimized articles, meta tags, FAQs, and image alt text that match search intent — grounded in your existing site content so it stays factually accurate and on-brand.",
-    bullets: ["Site-grounded drafts", "Readability + intent score", "One-click humanize pass"],
-    badge: "Most used",
-    featured: true,
+    id: "engines",
+    label: "Core engines",
+    title: "Multi-engine rank + citation tracking",
+    subtitle:
+      "Legacy SEO tools treat Google as the only search engine. Sage tracks both classical SERPs and the new AI engines side-by-side — because that's where your customers actually ask questions in 2026.",
+    features: [
+      {
+        icon: Search,
+        title: "Google + Bing Dual-Core Tracking",
+        description:
+          "Native rank tracking across both search ecosystems. Daily positions, SERP features (featured snippets, People Also Ask, image pack, local pack), device + location granularity, and intent classification for every keyword.",
+        bullets: [
+          "Google + Bing daily refresh",
+          "Device + location precision",
+          "SERP feature attribution",
+          "Intent + topic clustering (TF-IDF + K-means)",
+        ],
+        featured: true,
+      },
+      {
+        icon: Bot,
+        title: "AI Citation Tracker (GEO)",
+        description:
+          "Real-time monitoring of brand mentions, citation frequency, and Share-of-Voice across ChatGPT, Google AI Overviews, Perplexity, and SearchGPT. Backed by automated llms.txt generation and NLWeb schema-graph aggregation.",
+        bullets: [
+          "4 AI engines + SearchGPT",
+          "Citation SOV % over time",
+          "llms.txt + NLWeb automation",
+          "Per-query citation log",
+        ],
+        badge: "Moat",
+        featured: true,
+      },
+    ],
   },
   {
-    icon: Bot,
-    title: "AI Visibility / GEO Tracking",
-    description:
-      "See how often your brand is cited in ChatGPT, Perplexity, Google AI Overviews, Claude, and Grok. Sage auto-generates llms.txt and scores your content for AI citability.",
-    bullets: ["5 AI engines tracked", "Citation share over time", "llms.txt auto-generator"],
-    badge: "New",
-    featured: true,
+    id: "generators",
+    label: "Content engines",
+    title: "Three specialized AI generators — not one generic blob",
+    subtitle:
+      "Every generator ships with an automated De-AI humanizer (zero robotic em-dashes, zero filler patterns), an E-E-A-T Scorer, an SEO Scorer, and a live Content Gap Analyzer comparing your draft against the top 10 ranking SERPs.",
+    features: [
+      {
+        icon: Home,
+        title: "Home Page Generator",
+        description:
+          "Architected for high conversion and core keyword dominance. Generates hero copy, value props, social proof blocks, FAQ schema, and organization schema — all grounded in your Brand Brain so it sounds like your team wrote it.",
+        bullets: [
+          "Conversion-architected hero",
+          "Auto FAQ + Organization schema",
+          "Brand-Brain grounded drafts",
+          "E-E-A-T scored (0–100)",
+        ],
+      },
+      {
+        icon: Briefcase,
+        title: "Services Generator",
+        description:
+          "Conversion-focused service pages built for local and national organic capture. Generates service H1/H2 structure, pricing tiers, benefit stacks, Service schema, and LocalBusiness schema for multi-location businesses.",
+        bullets: [
+          "Local + national SEO structure",
+          "Service + LocalBusiness schema",
+          "Pricing tier + benefit blocks",
+          "Multi-location variants",
+        ],
+      },
+      {
+        icon: FileText,
+        title: "Blog Post Generator",
+        description:
+          "Long-form, authoritative content engine. Generates 2,000–4,000 word articles with proper H2/H3 hierarchy, internal link suggestions, Article schema, and a Content Gap Analyzer report showing exactly which semantic topics your draft is missing vs the top 10.",
+        bullets: [
+          "2,000–4,000 word drafts",
+          "Content Gap vs top 10 SERPs",
+          "Article schema auto-attached",
+          "De-AI humanizer pass",
+        ],
+        featured: true,
+      },
+      {
+        icon: BadgeCheck,
+        title: "De-AI Humanizer + Scoring Suite",
+        description:
+          "Every draft from every generator runs through the same pipeline: an automated humanizer that strips AI watermarks and robotic em-dashes, an E-E-A-T Scorer, an SEO Scorer, and a Content Gap Detector. All on a 0–100 scale with actionable fix lists.",
+        bullets: [
+          "Strips AI watermarks + em-dashes",
+          "E-E-A-T Scorer (Experience, Expertise, Authority, Trust)",
+          "SEO Scorer (intent, density, readability)",
+          "Content Gap vs top 10 SERPs",
+        ],
+        badge: "Standard on all 3",
+      },
+    ],
   },
   {
-    icon: TrendingUp,
-    title: "Rank Tracking",
-    description:
-      "Daily rank tracking across desktop, mobile, and local packs — for any country, city, or language. Trigger alerts on volatility and watch competitors side-by-side.",
-    bullets: ["Daily + on-demand refresh", "Local + map pack", "Competitor overlay"],
-  },
-  {
-    icon: Code2,
-    title: "AI Schema Markup",
-    description:
-      "Auto-generate JSON-LD for Articles, Products, FAQ, HowTo, Breadcrumbs, Organization, and 30+ schema types — with conditional rules per page template and AI-suggested properties.",
-    bullets: ["30+ schema types", "Conditional templates", "Zero invalid markup"],
-  },
-  {
-    icon: FileSearch,
-    title: "Site Audit Engine",
-    description:
-      "358-point technical SEO audit that runs continuously — Core Web Vitals, broken links, missing meta, redirect chains, indexability, structured data errors, and one-click auto-fixes.",
-    bullets: ["358 checks, 24h refresh", "Auto-fix PRs", "Page-level severity"],
-  },
-  {
-    icon: Link2,
-    title: "AI Internal Linking",
-    description:
-      "Sage reads every page on your site and suggests the highest-context internal links — then auto-inserts them with anchor text that matches your target keywords and orphaned-content strategy.",
-    bullets: ["Context-aware suggestions", "Orphaned content rescue", "Bulk apply + undo"],
-  },
-  {
-    icon: Target,
-    title: "Competitor Intelligence",
-    description:
-      "Drop in a competitor URL and Sage reverse-engineers their content strategy, keyword gaps, schema patterns, and backlink velocity — then queues the opportunities into your roadmap.",
-    bullets: ["Keyword gap analysis", "Content velocity monitor", "Backlink source intel"],
-  },
-  {
-    icon: ShieldCheck,
-    title: "Backlink Monitor",
-    description:
-      "Track every backlink pointing to your site — new, lost, toxic — with auto-disavow file generation. Get alerted the moment a high-authority link disappears or a spammy one appears.",
-    bullets: ["Real-time link alerts", "Toxicity scoring", "Auto-disavow exports"],
-  },
-  {
-    icon: Plug,
-    title: "MCP & REST API",
-    description:
-      "Connect Sage to Claude, Cursor, ChatGPT, or any agent via our Model Context Protocol server. Run audits, generate content, and ship fixes programmatically — no UI needed.",
-    bullets: ["MCP server + 28 tools", "REST + webhooks", "BYOK LLM support"],
-    badge: "For agents",
-    featured: true,
+    id: "moat",
+    label: "Moat",
+    title: "The features competitors can't copy in a quarter",
+    subtitle:
+      "Brand Brain grounds every generation in your voice. SEO Version Control gives you one-click rollback. Competitive AI Battlecards show how AI engines perceive you vs your rivals. The MCP server turns Sage into an agent skill, not a dashboard.",
+    features: [
+      {
+        icon: Brain,
+        title: "Brand Brain",
+        description:
+          "A context-file repository — brand voice, style guides, internal link maps, banned phrases, approved terminology — that grounds every AI output. Upload once; every Home, Services, and Blog draft inherits it. No more re-prompting.",
+        bullets: [
+          "Brand voice + style guides",
+          "Internal link graph map",
+          "Banned-phrase + glossary",
+          "Versioned + team-editable",
+        ],
+        badge: "Moat",
+        featured: true,
+      },
+      {
+        icon: GitBranch,
+        title: "SEO Version Control",
+        description:
+          "Every metadata change, schema update, redirect rule, and content edit is committed to a versioned timeline. See the impact-over-time chart for any change. One-click rollback to any prior state — no Git knowledge required.",
+        bullets: [
+          "Change history per URL",
+          "Impact-over-time tracking",
+          "One-click rollback",
+          "Diff view for any field",
+        ],
+        badge: "Moat",
+        featured: true,
+      },
+      {
+        icon: Swords,
+        title: "Competitive AI Battlecards",
+        description:
+          "Instant insights into how AI engines perceive you versus your top 3 competitors. See which brands get cited most often, for which queries, and which content gaps are letting rivals steal your AI share-of-voice.",
+        bullets: [
+          "Side-by-side AI SOV %",
+          "Per-query citation winners",
+          "Rival content gap reports",
+          "Weekly delta alerts",
+        ],
+        badge: "Moat",
+      },
+      {
+        icon: Code2,
+        title: "Schema & GEO Automation",
+        description:
+          "Advanced structured data builder with 30+ schema types, conditional templates, and automated llms.txt + NLWeb schema-graph aggregation. Validates against Google's Rich Results Test on every publish.",
+        bullets: [
+          "30+ schema types",
+          "Conditional templates",
+          "llms.txt + NLWeb aggregation",
+          "Auto Rich Results validation",
+        ],
+      },
+      {
+        icon: ShieldCheck,
+        title: "Cloud Site Audit Engine",
+        description:
+          "Crawler handling Core Web Vitals, broken links, duplicate content, and JS/SSR rendering checks. Runs continuously on a 24h refresh with severity scoring and one-click auto-fix PRs shipped straight to your repo.",
+        bullets: [
+          "358 checks, 24h refresh",
+          "JS/SSR rendering checks",
+          "Auto-fix PRs to GitHub",
+          "Page-level severity",
+        ],
+      },
+      {
+        icon: Link2,
+        title: "AI Internal Linking & Link Health",
+        description:
+          "Context-aware internal link suggestions, orphaned-content rescue, link-rot detection, and bulk updates. Reads your full site graph and suggests the highest-context links with anchor text matching your target keywords.",
+        bullets: [
+          "Context-aware suggestions",
+          "Orphaned-content rescue",
+          "Link-rot detection",
+          "Bulk apply + undo",
+        ],
+      },
+      {
+        icon: Plug,
+        title: "MCP Server + REST API",
+        description:
+          "Sage exposes 28 MCP tools so Claude Code, Cursor, or your custom agent can audit, generate, apply schema, and ship fixes programmatically. No UI needed — run Sage from your CI/CD pipeline.",
+        bullets: [
+          "28 MCP tools, OAuth + BYOK",
+          "REST + webhooks",
+          "5 starter Agent Skills (npx add)",
+          "GitHub Action ready",
+        ],
+        badge: "For agents",
+        featured: true,
+      },
+      {
+        icon: Sparkles,
+        title: "Analytics Sync + Decay Detection",
+        description:
+          "Native Google Search Console + GA4 integration with per-URL attribution and content-decay detection. Sage flags pages losing traffic before you notice, with root-cause analysis and a one-click refresh plan.",
+        bullets: [
+          "GSC + GA4 per-URL attribution",
+          "Content-decay alerts",
+          "Root-cause analysis",
+          "Auto refresh plans",
+        ],
+      },
+    ],
   },
 ];
 
@@ -120,15 +271,44 @@ export function Features() {
           </h2>
           <p className="mt-4 text-base sm:text-lg text-muted-foreground text-pretty">
             We benchmarked Yoast, Rank Math, AIOSEO, Open SEO, and SEO Machine — then built the parts
-            that actually move rankings into a single AI-first platform. No bloated WordPress plugins,
-            no per-feature upsells.
+            that actually move rankings into a single AI-first platform. Edge-native on Cloudflare
+            Workers + D1. BYOK DataForSEO. No bloated WordPress plugins, no per-feature upsells.
           </p>
         </div>
 
-        {/* Feature grid */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {features.map((feature, i) => (
-            <FeatureCard key={i} feature={feature} index={i} />
+        {/* Render each group */}
+        <div className="mt-16 space-y-16 lg:space-y-24">
+          {groups.map((group) => (
+            <div key={group.id} className="relative">
+              {/* Group header */}
+              <div className="max-w-3xl mb-8">
+                <div className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-emerald-300 mb-3">
+                  <span className="h-px w-6 bg-emerald-500/60" />
+                  {group.label}
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-display font-bold text-foreground text-balance">
+                  {group.title}
+                </h3>
+                <p className="mt-3 text-sm sm:text-base text-muted-foreground text-pretty">
+                  {group.subtitle}
+                </p>
+              </div>
+
+              {/* Feature grid */}
+              <div
+                className={cn(
+                  "grid gap-4",
+                  group.features.length === 2 && "grid-cols-1 md:grid-cols-2",
+                  group.features.length === 3 && "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+                  group.features.length === 4 && "grid-cols-1 md:grid-cols-2 lg:grid-cols-4",
+                  group.features.length > 4 && "grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+                )}
+              >
+                {group.features.map((feature, i) => (
+                  <FeatureCard key={i} feature={feature} index={i} />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </div>
@@ -142,9 +322,9 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.4, delay: (index % 3) * 0.06 }}
+      transition={{ duration: 0.4, delay: (index % 4) * 0.05 }}
       className={cn(
-        "group relative rounded-xl border p-5 sm:p-6 transition-all duration-300",
+        "group relative rounded-xl border p-5 sm:p-6 transition-all duration-300 flex flex-col",
         feature.featured
           ? "border-emerald-500/25 bg-emerald-500/[0.04] hover:border-emerald-500/40 hover:bg-emerald-500/[0.07]"
           : "border-white/[0.07] bg-white/[0.02] hover:border-white/[0.12] hover:bg-white/[0.04]"
@@ -185,8 +365,8 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
       </div>
 
       {/* Body */}
-      <h3 className="text-lg font-display font-semibold text-foreground">{feature.title}</h3>
-      <p className="mt-2 text-sm text-muted-foreground leading-relaxed text-pretty">
+      <h4 className="text-base font-display font-semibold text-foreground">{feature.title}</h4>
+      <p className="mt-2 text-sm text-muted-foreground leading-relaxed text-pretty flex-1">
         {feature.description}
       </p>
 
@@ -194,7 +374,7 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
       <ul className="mt-4 space-y-1.5">
         {feature.bullets.map((b, i) => (
           <li key={i} className="flex items-center gap-2 text-xs text-foreground/80">
-            <span className="h-1 w-1 rounded-full bg-emerald-400" />
+            <span className="h-1 w-1 rounded-full bg-emerald-400 shrink-0" />
             {b}
           </li>
         ))}

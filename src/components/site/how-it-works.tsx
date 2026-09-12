@@ -2,36 +2,36 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { Plug, Cpu, ListChecks, TrendingUp } from "lucide-react";
+import { KeyRound, Cpu, ListChecks, TrendingUp } from "lucide-react";
 
 const steps = [
   {
-    icon: Plug,
-    title: "Connect your site",
+    icon: KeyRound,
+    title: "Connect your site + BYOK keys",
     description:
-      "Drop in a URL or install our lightweight snippet. Sage works on WordPress, Shopify, Webflow, Next.js, Astro, or any HTML site. No CMS plugin bloat — connects in under 60 seconds.",
-    detail: "1-click installs · REST & MCP API · sitemap auto-discovery",
+      "Drop in a URL or install our lightweight snippet — works on WordPress, Shopify, Webflow, Next.js, Astro, or any HTML site. Add your own DataForSEO + LLM API keys to pay wholesale data costs, or use our metered credits on Pro. Connects in under 60 seconds.",
+    detail: "1-click installs · BYOK or credits · sitemap auto-discovery",
   },
   {
     icon: Cpu,
-    title: "AI analyzes everything",
+    title: "AI analyzes everything across Google, Bing + AI engines",
     description:
-      "Sage runs a 358-point audit, crawls your content, decodes competitors, and benchmarks your AI visibility across ChatGPT, Perplexity, Google AIO, Claude, and Grok. All in the background.",
+      "Sage runs a 358-point audit, crawls your content, decodes competitors, tracks rankings on Google + Bing, and benchmarks your AI visibility across ChatGPT, Perplexity, Google AI Overviews, SearchGPT, and Claude. All in the background, edge-native on Cloudflare Workers + D1.",
     detail: "358-point audit · 5 AI engines tracked · competitor reverse-engineering",
   },
   {
     icon: ListChecks,
-    title: "Get prioritized fixes",
+    title: "Generate content + ship prioritized fixes",
     description:
-      "Every issue is ranked by traffic impact and effort. Sage ships auto-fix pull requests for technical SEO and AI-generated content drafts for on-page — both ready to review in one click.",
-    detail: "Impact-scored queue · auto-fix PRs · AI content drafts",
+      "Use the Home, Services, or Blog generator — each grounded in your Brand Brain, humanized via De-AI, and scored on E-E-A-T + SEO + Content Gap. Every audit issue is ranked by traffic impact; Sage ships auto-fix pull requests and AI drafts ready to review in one click.",
+    detail: "3 generators · Brand Brain grounded · auto-fix PRs",
   },
   {
     icon: TrendingUp,
-    title: "Watch rankings + AI visibility climb",
+    title: "Watch rankings + AI citations climb — with rollback",
     description:
-      "Daily rank tracking across desktop, mobile, and local — plus weekly AI-citation reports showing where your brand now appears inside AI engines. ROI measured in clicks, not vanity metrics.",
-    detail: "daily refresh · AI citation reports · ROI attribution",
+      "Daily rank tracking across Google + Bing, plus weekly AI-citation reports showing where your brand now appears inside AI engines. Every change is committed to SEO Version Control — see impact-over-time and one-click rollback any metadata, schema, or content edit.",
+    detail: "daily refresh · AI citation reports · one-click rollback",
   },
 ];
 
@@ -56,7 +56,8 @@ export function HowItWorks() {
           </h2>
           <p className="mt-4 text-base sm:text-lg text-muted-foreground text-pretty">
             No 6-week onboarding, no professional services contract. Most teams ship their first
-            AI-generated content and technical fixes on day one.
+            AI-generated content and technical fixes on day one — and pay only for the data they
+            actually use.
           </p>
         </div>
 

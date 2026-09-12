@@ -14,36 +14,40 @@ import { ArrowRight, LifeBuoy } from "lucide-react";
 
 const faqs = [
   {
-    q: "What makes Sage different from Yoast or Rank Math?",
-    a: "Yoast and Rank Math are WordPress plugins focused on on-page SEO for a single CMS. Sage is an AI-native platform that works across any stack, tracks AI-search visibility (GEO) — how often your brand shows up in ChatGPT, Perplexity, and Google AI Overviews — and ships agentic workflows via an MCP API so AI agents can run SEO for you. It also includes unlimited AI content generation, which Yoast and Rank Math meter per-post.",
+    q: "What does 'AI-Visibility-first' actually mean?",
+    a: "It means Sage is built around the assumption that 60%+ of informational queries in 2026 end on Google without a click — the answer is generated in-place by an AI engine. We track your visibility across Google, Bing, ChatGPT, Perplexity, Google AI Overviews, SearchGPT, and Claude, generate llms.txt + NLWeb schema to make your content AI-citable, and run a Content Gap Analyzer against top SERPs so your drafts include the topics AI engines actually cite.",
   },
   {
-    q: "Does Sage work on non-WordPress sites?",
-    a: "Yes. Sage is CMS-agnostic. Connect any site via a 4KB JavaScript snippet, sitemap URL, or our REST/MCP API. We have native integrations for WordPress, Shopify, Webflow, Next.js, Astro, and static HTML. You can also use Sage purely as an API — many teams run it from CI/CD pipelines with no UI at all.",
+    q: "Why does Sage track Bing natively when most tools ignore it?",
+    a: "Bing powers ChatGPT's web search, Microsoft Copilot, and a growing share of voice-search via Edge. If you're not tracking Bing, you're blind to how AI engines that ingest Bing's index perceive you. Sage tracks Google + Bing daily on every plan — including the free BYOK tier — at the same wholesale cost (≈ $0.004 per keyword-day per engine).",
   },
   {
-    q: "What is GEO (Generative Engine Optimization) and why should I care?",
-    a: "GEO is the practice of optimizing your content so AI engines like ChatGPT, Perplexity, Google AI Overviews, Claude, and Grok cite your brand as a source. Recent studies show 60% of informational queries now end on Google without a click — the answer is generated in-place. If your brand isn't cited inside those AI answers, you lose the impression. Sage tracks your visibility across 5 AI engines, generates llms.txt files, and scores how 'AI-citable' your content is.",
+    q: "How does BYOK (Bring Your Own Key) pricing work?",
+    a: "On the Free tier, you bring your own DataForSEO API key (for rank tracking, SERP lookups, audits) and your own LLM API key (for content generation — OpenAI, Anthropic, etc.). Sage charges $0 platform fee — you pay DataForSEO and your LLM provider directly at their wholesale rates. On Pro ($49/mo) and Agency ($149/mo), we include usage credits ($30 and $100 respectively) and you can still BYOK to bypass credits entirely. We publish our exact wholesale rates in a transparent cost table on the pricing page.",
   },
   {
-    q: "Can I use Sage with my existing SEO tools?",
-    a: "Yes. Sage integrates with Google Search Console, GA4, Ahrefs, DataForSEO, WordPress, Shopify, Webflow, Zapier, Slack, and GitHub. The MCP API also lets you connect Sage to any AI agent (Claude, Cursor, ChatGPT) or custom workflow. Many of our customers use Sage alongside Ahrefs for backlink research — Sage handles the audits, content, rank tracking, and AI visibility.",
+    q: "What's the difference between the 3 content generators?",
+    a: "Home Page Generator outputs hero copy, value props, social proof blocks, and Organization + FAQ schema — built for conversion on your root domain. Services Generator outputs service H1/H2 structure, pricing tiers, benefit stacks, and Service + LocalBusiness schema for local and national SEO. Blog Post Generator outputs 2,000–4,000 word long-form articles with proper H2/H3 hierarchy, Article schema, internal link suggestions, and a Content Gap report vs the top 10 SERPs. All three run the same De-AI humanizer + E-E-A-T Scorer + SEO Scorer pipeline.",
   },
   {
-    q: "Is there a free trial or free tier?",
-    a: "Every paid plan starts with a 14-day free trial — no credit card required. The Starter plan also includes a permanent free tier limited to 1 site and 50 tracked keywords. You can stay on the free tier indefinitely; we'll never auto-bill you.",
+    q: "What does the De-AI humanizer actually do?",
+    a: "Every draft from every generator runs through a humanizer that strips AI watermarks: robotic em-dashes (—), repetitive sentence openers, ChatGPT's telltale transitions ('moreover', 'in conclusion', 'it's worth noting'), bulleted-list padding, and filler phrases. The output reads like a human wrote it. Combined with the Brand Brain (your voice + style guide), drafts come out sounding like your team — not like a chatbot. Each draft shows a humanize-pass diff so you can see exactly what was stripped.",
   },
   {
-    q: "How accurate is the AI content generator?",
-    a: "Sage's AI is trained on top-ranking pages in your niche and grounded in your existing site content, so it produces factually accurate, on-brand copy that already matches search intent. Every generated piece includes a content score (0–100), readability analysis (Flesch), internal-link suggestions, and a one-click humanize pass. We do not generate generic ChatGPT-style fluff — every draft cites real URLs from your site.",
+    q: "What is the Brand Brain and how does it ground generations?",
+    a: "Brand Brain is a versioned context-file repository: your brand voice doc, style guide, banned-phrase list, approved glossary, internal link map, and tone examples. Every Home, Services, and Blog generation pulls from your Brand Brain before producing output, so drafts inherit your voice without re-prompting. Team-editable, version-controlled, and exposed via MCP so your AI agents can read it too.",
   },
   {
-    q: "What does the MCP server actually do?",
-    a: "The Model Context Protocol server exposes 28 Sage tools to any MCP-compatible AI agent (Claude Desktop, Cursor, Cline, etc.). Your agent can run audits, generate content, query keyword rankings, apply schema, ship auto-fix PRs, and pull AI-visibility reports — all without touching the Sage UI. We publish a free MCP inspector and starter prompts in our docs.",
+    q: "How does SEO Version Control work?",
+    a: "Every metadata change, schema update, redirect rule, content edit, and internal-link insertion is committed to a per-URL version timeline. You see a Git-style diff for any field, an impact-over-time chart showing what happened to rankings + traffic after the change, and a one-click rollback button. No Git knowledge required — works from the dashboard, the REST API, or via MCP. Many customers wire it into their CI pipeline so every deploy creates a Sage version snapshot automatically.",
+  },
+  {
+    q: "What is the MCP server and what can my AI agent do with it?",
+    a: "The Model Context Protocol server exposes 28 Sage tools to any MCP-compatible agent (Claude Code, Cursor, Cline, custom agents). Your agent can run audits, generate content via any of the 3 generators, query keyword rankings on Google + Bing, pull AI-citation reports, apply schema, ship auto-fix PRs, read the Brand Brain, and trigger SEO Version Control rollbacks — all without touching the Sage UI. We publish 5 starter Agent Skills installable via `npx skills add` and a free MCP inspector in the docs.",
   },
   {
     q: "Do you offer white-label / agency features?",
-    a: "Yes. The Agency plan ($249/mo) includes white-labeled dashboards, client workspaces with granular permissions, bulk CSV automation, custom branded PDF reports, and a dedicated success manager. We also offer SOC 2 Type II reports and DPAs for enterprise customers.",
+    a: "Yes. The Agency plan ($149/mo) includes white-labeled dashboards, client workspaces with granular permissions, bulk CSV automation, custom branded PDF reports, Competitive AI Battlecards for client-vs-rival benchmarks, and a dedicated success manager. We also offer SOC 2 Type II reports and DPAs for enterprise customers. BYOK is supported on all tiers — agencies often BYOK DataForSEO and pass the wholesale savings through to clients.",
   },
 ];
 

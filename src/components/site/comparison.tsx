@@ -15,40 +15,33 @@ interface Row {
 }
 
 const rows: Row[] = [
+  // Multi-engine tracking
   {
-    category: "AI capabilities",
-    feature: "AI content generator",
-    sage: "Site-grounded",
-    yoast: "Basic",
-    rankmath: "Basic",
-    ahrefs: false,
+    category: "Multi-engine tracking",
+    feature: "Google rank tracking",
+    sage: true,
+    yoast: "Add-on",
+    rankmath: true,
+    ahrefs: true,
   },
   {
-    category: "AI capabilities",
-    feature: "AI schema markup generator",
-    sage: "30+ types",
+    category: "Multi-engine tracking",
+    feature: "Bing rank tracking (native)",
+    sage: true,
     yoast: false,
-    rankmath: "Limited",
-    ahrefs: false,
+    rankmath: false,
+    ahrefs: "Limited",
   },
   {
-    category: "AI capabilities",
-    feature: "AI internal linking",
-    sage: "Context-aware",
-    yoast: false,
-    rankmath: "Link Genius",
-    ahrefs: false,
-  },
-  {
-    category: "AI Visibility",
-    feature: "GEO / AI-engine citation tracking",
+    category: "Multi-engine tracking",
+    feature: "AI Citation Tracker (GEO)",
     sage: "5 engines",
     yoast: "Beta",
     rankmath: "Beta",
     ahrefs: false,
   },
   {
-    category: "AI Visibility",
+    category: "Multi-engine tracking",
     feature: "llms.txt auto-generation",
     sage: true,
     yoast: "Roadmap",
@@ -56,13 +49,104 @@ const rows: Row[] = [
     ahrefs: false,
   },
   {
-    category: "AI Visibility",
-    feature: "NLWeb / schema aggregation",
+    category: "Multi-engine tracking",
+    feature: "NLWeb schema-graph aggregation",
     sage: true,
     yoast: "Beta",
     rankmath: false,
     ahrefs: false,
   },
+  // Content engines
+  {
+    category: "Content engines",
+    feature: "Home Page Generator",
+    sage: "Brand-Brain grounded",
+    yoast: false,
+    rankmath: false,
+    ahrefs: false,
+  },
+  {
+    category: "Content engines",
+    feature: "Services Generator (LocalBusiness)",
+    sage: true,
+    yoast: false,
+    rankmath: false,
+    ahrefs: false,
+  },
+  {
+    category: "Content engines",
+    feature: "Blog Post Generator",
+    sage: "Long-form + gap analysis",
+    yoast: "Basic",
+    rankmath: "Basic",
+    ahrefs: false,
+  },
+  {
+    category: "Content engines",
+    feature: "De-AI humanizer (strips em-dashes + watermarks)",
+    sage: true,
+    yoast: false,
+    rankmath: false,
+    ahrefs: false,
+  },
+  {
+    category: "Content engines",
+    feature: "E-E-A-T Scorer (0–100)",
+    sage: true,
+    yoast: false,
+    rankmath: false,
+    ahrefs: false,
+  },
+  {
+    category: "Content engines",
+    feature: "Content Gap Analyzer vs top 10 SERPs",
+    sage: true,
+    yoast: false,
+    rankmath: false,
+    ahrefs: "Manual",
+  },
+  // Moat
+  {
+    category: "Moat",
+    feature: "Brand Brain (context repository)",
+    sage: true,
+    yoast: false,
+    rankmath: false,
+    ahrefs: false,
+  },
+  {
+    category: "Moat",
+    feature: "SEO Version Control + rollback",
+    sage: true,
+    yoast: false,
+    rankmath: false,
+    ahrefs: false,
+  },
+  {
+    category: "Moat",
+    feature: "Competitive AI Battlecards",
+    sage: "Top 3 rivals",
+    yoast: false,
+    rankmath: false,
+    ahrefs: false,
+  },
+  {
+    category: "Moat",
+    feature: "AI internal linking + link-rot detection",
+    sage: true,
+    yoast: false,
+    rankmath: "Link Genius",
+    ahrefs: false,
+  },
+  {
+    category: "Moat",
+    feature: "Content-decay detection (GSC + GA4)",
+    sage: true,
+    yoast: false,
+    rankmath: false,
+    ahrefs: "Manual",
+  },
+  // Platform
   {
     category: "Platform",
     feature: "Works on any CMS / stack",
@@ -81,39 +165,24 @@ const rows: Row[] = [
   },
   {
     category: "Platform",
+    feature: "Edge-native (Cloudflare Workers + D1)",
+    sage: true,
+    yoast: false,
+    rankmath: false,
+    ahrefs: false,
+  },
+  {
+    category: "Platform",
     feature: "REST API + webhooks",
     sage: true,
     yoast: false,
     rankmath: false,
     ahrefs: "Limited",
   },
+  // Pricing
   {
-    category: "Rank tracking",
-    feature: "Daily refresh (all plans)",
-    sage: true,
-    yoast: "Weekly",
-    rankmath: "Weekly",
-    ahrefs: "Daily (Pro+)",
-  },
-  {
-    category: "Rank tracking",
-    feature: "Local + map pack tracking",
-    sage: true,
-    yoast: "Add-on",
-    rankmath: true,
-    ahrefs: true,
-  },
-  {
-    category: "Audits",
-    feature: "Continuous audit (24h refresh)",
-    sage: "358 checks",
-    yoast: "On-demand",
-    rankmath: "On-demand",
-    ahrefs: "On-demand",
-  },
-  {
-    category: "Audits",
-    feature: "Auto-fix pull requests",
+    category: "Pricing",
+    feature: "BYOK (Bring Your Own Key)",
     sage: true,
     yoast: false,
     rankmath: false,
@@ -121,19 +190,27 @@ const rows: Row[] = [
   },
   {
     category: "Pricing",
-    feature: "Free tier",
-    sage: "1 site · 50 KWs",
+    feature: "Wholesale data pass-through (no markup)",
+    sage: true,
     yoast: false,
-    rankmath: "1 site",
+    rankmath: false,
     ahrefs: false,
   },
   {
     category: "Pricing",
     feature: "Starting paid plan",
-    sage: "$29/mo",
+    sage: "$49/mo + $30 credits",
     yoast: "$99/yr",
     rankmath: "$79/yr",
     ahrefs: "$129/mo",
+  },
+  {
+    category: "Pricing",
+    feature: "Free tier",
+    sage: "BYOK · 1 site · 100 KWs",
+    yoast: false,
+    rankmath: "1 site",
+    ahrefs: false,
   },
 ];
 
@@ -167,8 +244,9 @@ export function Comparison() {
           </h2>
           <p className="mt-4 text-base sm:text-lg text-muted-foreground text-pretty">
             Yoast and Rank Math are great WordPress plugins. Ahrefs is a great backlink database.
-            Sage is the only platform built AI-native from day one — and the only one tracking your
-            visibility inside AI engines.
+            Sage is the only platform built AI-Visibility-first — and the only one tracking your
+            citations inside ChatGPT, Perplexity, and AI Overviews while letting your agents run the
+            work via MCP.
           </p>
         </div>
 
@@ -199,7 +277,7 @@ export function Comparison() {
           className="mt-6 rounded-2xl border border-white/[0.08] overflow-hidden glass"
         >
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[720px]">
+            <table className="w-full min-w-[760px]">
               <thead>
                 <tr className="border-b border-white/[0.08]">
                   <th className="text-left text-xs font-semibold text-foreground px-5 py-4 sticky left-0 bg-background/80 backdrop-blur-sm">
@@ -246,7 +324,8 @@ export function Comparison() {
         <p className="mt-4 text-xs text-muted-foreground">
           <Minus className="inline h-3 w-3 mr-1" />
           Feature data verified against official docs as of Sep 2026. Pricing reflects vendor-published
-          entry plans. Sage includes unlimited AI content generation on all paid tiers.
+          entry plans. Sage Free tier requires BYOK (your own DataForSEO + LLM API keys) — wholesale
+          data costs only, no platform markup.
         </p>
       </div>
     </section>

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Check, Sparkles, ArrowRight, Building2, Zap, Star } from "lucide-react";
+import { Check, Sparkles, ArrowRight, Building2, Zap, KeyRound, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -13,69 +13,86 @@ interface Plan {
   icon: typeof Zap;
   tagline: string;
   monthly: number;
-  annual: number;
+  credits: number;
   features: string[];
   cta: string;
   featured?: boolean;
+  badge?: string;
 }
 
 const plans: Plan[] = [
   {
-    id: "starter",
-    name: "Starter",
-    icon: Zap,
-    tagline: "For solo founders and small blogs getting started with AI-driven SEO.",
-    monthly: 29,
-    annual: 23,
+    id: "free",
+    name: "Free · BYOK",
+    icon: KeyRound,
+    tagline: "Bring your own DataForSEO + LLM API keys. Full platform access. Pay wholesale data costs only.",
+    monthly: 0,
+    credits: 0,
     features: [
-      "1 site · 50 tracked keywords",
-      "AI content generator (10 articles/mo)",
-      "358-point site audit (weekly)",
-      "Schema markup generator",
-      "Rank tracking (Google + Bing)",
+      "1 site · 100 tracked keywords",
+      "BYOK DataForSEO + LLM keys",
+      "Google + Bing rank tracking",
+      "All 3 content generators (5/mo)",
+      "Site audit engine (weekly)",
+      "Schema + llms.txt automation",
+      "MCP server + REST API",
       "Community support",
     ],
-    cta: "Start free trial",
+    cta: "Start free — add your keys",
   },
   {
     id: "pro",
     name: "Pro",
     icon: Sparkles,
-    tagline: "For growing teams that need full AI SEO workflows + GEO tracking.",
-    monthly: 89,
-    annual: 71,
+    tagline: "For growing teams that want full AI SEO workflows + GEO tracking without surprise invoices.",
+    monthly: 49,
+    credits: 30,
     features: [
       "5 sites · 1,000 tracked keywords",
+      "Includes $30/mo usage credits",
+      "BYOK optional (cheaper if you do)",
       "Unlimited AI content generation",
-      "AI Visibility / GEO tracking (5 engines)",
+      "AI Citation Tracker (5 engines)",
+      "Brand Brain + Version Control",
+      "Competitive AI Battlecards",
       "AI internal linking + auto-fix PRs",
-      "Competitor intelligence (5 rivals)",
-      "llms.txt + NLWeb schema automation",
-      "MCP server + REST API access",
       "Priority support (4h SLA)",
     ],
-    cta: "Start free trial",
+    cta: "Start 14-day free trial",
     featured: true,
+    badge: "Most popular",
   },
   {
     id: "agency",
     name: "Agency",
     icon: Building2,
-    tagline: "For agencies and enterprises managing multiple client sites at scale.",
-    monthly: 249,
-    annual: 199,
+    tagline: "For agencies and enterprises managing multiple client sites at scale. White-label everything.",
+    monthly: 149,
+    credits: 100,
     features: [
       "Unlimited sites · 10,000 keywords",
+      "Includes $100/mo usage credits",
       "Everything in Pro, plus:",
       "White-label dashboard + reports",
       "Client workspaces + permissions",
       "Bulk CSV automation",
-      "Backlink monitor + auto-disavow",
+      "SOC 2 Type II + DPAs",
       "Dedicated success manager",
-      "99.9% uptime SLA + SOC 2",
+      "99.9% uptime SLA",
     ],
     cta: "Talk to sales",
   },
+];
+
+const wholesaleUsage = [
+  { operation: "Keyword track (per keyword, per day)", cost: "$0.004", note: "Google + Bing" },
+  { operation: "SERP lookup (per query)", cost: "$0.002", note: "Top 100 results" },
+  { operation: "AI citation check (per query, per engine)", cost: "$0.008", note: "ChatGPT, Perplexity, AIO, SearchGPT" },
+  { operation: "Site audit (per page crawled)", cost: "$0.001", note: "Includes CWV + JS render" },
+  { operation: "Content gap analysis (per draft)", cost: "$0.04", note: "vs top 10 SERPs" },
+  { operation: "AI content generation (per draft)", cost: "$0.02", note: "LLM cost · BYOK bypasses" },
+  { operation: "Schema validation (per URL)", cost: "$0.0005", note: "Rich Results check" },
+  { operation: "Backlink lookup (per URL)", cost: "$0.006", note: "Real-time index" },
 ];
 
 export function Pricing() {
@@ -96,17 +113,18 @@ export function Pricing() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
         <div className="max-w-3xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.02] px-3 py-1 text-[11px] font-medium text-emerald-300 uppercase tracking-wider">
-            Pricing
+            Pricing · Hybrid BYOK
           </div>
           <h2
             id="pricing-heading"
             className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-display font-bold tracking-tight text-foreground text-balance"
           >
-            One price. <span className="text-gradient-emerald">Every AI feature.</span> No upsells.
+            A flat platform fee. <span className="text-gradient-emerald">Wholesale data costs.</span> Zero markup.
           </h2>
           <p className="mt-4 text-base sm:text-lg text-muted-foreground text-pretty">
-            We benchmarked Yoast ($99/yr), Rank Math ($79/yr), and Ahrefs ($129/mo) — then packed
-            every capability into a single plan. Cancel anytime. 14-day free trial on every tier.
+            Ahrefs charges $129/mo because they pre-pay for data and resell it at 4× markup. Sage
+            passes raw DataForSEO costs through at wholesale. Bring your own key on Free, or use our
+            metered credits on Pro/Agency — either way, you see the exact cost of every operation.
           </p>
 
           {/* Billing toggle */}
@@ -156,11 +174,11 @@ export function Pricing() {
                   : "border-white/[0.08] bg-white/[0.02]"
               )}
             >
-              {plan.featured && (
+              {plan.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-500 text-emerald-950">
-                    <Star className="h-3 w-3 fill-emerald-950" />
-                    Most popular
+                    <Sparkles className="h-3 w-3 fill-emerald-950" />
+                    {plan.badge}
                   </span>
                 </div>
               )}
@@ -178,19 +196,34 @@ export function Pricing() {
                 </div>
                 <h3 className="text-xl font-display font-bold text-foreground">{plan.name}</h3>
               </div>
-              <p className="text-sm text-muted-foreground text-pretty min-h-[40px]">{plan.tagline}</p>
+              <p className="text-sm text-muted-foreground text-pretty min-h-[60px]">{plan.tagline}</p>
 
-              <div className="mt-5 mb-5 flex items-baseline gap-1">
+              <div className="mt-5 mb-1 flex items-baseline gap-1">
                 <span className="text-4xl font-display font-bold text-foreground">
-                  ${annual ? plan.annual : plan.monthly}
+                  ${annual && plan.monthly > 0 ? Math.round(plan.monthly * 0.8) : plan.monthly}
                 </span>
                 <span className="text-sm text-muted-foreground">/mo</span>
-                {annual && (
+                {plan.monthly > 0 && annual && (
                   <span className="ml-2 text-[10px] text-emerald-300 bg-emerald-500/10 px-1.5 py-0.5 rounded">
                     billed annually
                   </span>
                 )}
+                {plan.monthly === 0 && (
+                  <span className="ml-2 text-[10px] text-emerald-300 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                    forever free
+                  </span>
+                )}
               </div>
+              {plan.credits > 0 && (
+                <p className="text-xs text-emerald-300/90 mb-4">
+                  + ${plan.credits}/mo wholesale data credits included
+                </p>
+              )}
+              {plan.credits === 0 && (
+                <p className="text-xs text-muted-foreground mb-4">
+                  Pay-as-you-go at exact wholesale cost
+                </p>
+              )}
 
               <Button
                 asChild
@@ -224,9 +257,63 @@ export function Pricing() {
           ))}
         </div>
 
+        {/* Wholesale usage transparency table */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.4 }}
+          className="mt-16 max-w-5xl mx-auto"
+        >
+          <div className="rounded-2xl border border-white/[0.08] glass overflow-hidden">
+            <div className="px-5 py-4 border-b border-white/[0.06] flex items-center gap-2.5">
+              <Calculator className="h-4 w-4 text-emerald-400" />
+              <div>
+                <div className="text-sm font-semibold text-foreground">
+                  Wholesale data costs — what you actually pay
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  No markup. Same rates DataForSEO charges us. BYOK on Free = these rates direct.
+                </div>
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[640px] text-sm">
+                <thead>
+                  <tr className="border-b border-white/[0.06] text-[10px] uppercase tracking-wider text-muted-foreground">
+                    <th className="text-left font-medium px-5 py-2.5">Operation</th>
+                    <th className="text-right font-medium px-5 py-2.5">Cost</th>
+                    <th className="text-left font-medium px-5 py-2.5">Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {wholesaleUsage.map((row, i) => (
+                    <tr
+                      key={i}
+                      className="border-b border-white/[0.03] last:border-0 hover:bg-white/[0.01] transition-colors"
+                    >
+                      <td className="px-5 py-2.5 text-foreground/90">{row.operation}</td>
+                      <td className="px-5 py-2.5 text-right font-mono text-emerald-300 font-semibold">
+                        {row.cost}
+                      </td>
+                      <td className="px-5 py-2.5 text-xs text-muted-foreground">{row.note}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground text-center">
+            <span className="text-foreground/80">Math example:</span> Tracking 1,000 keywords daily
+            for a month ≈ 30,000 keyword-days × $0.004 = <span className="text-emerald-300 font-semibold">$120/mo wholesale</span>.
+            Ahrefs charges $129/mo for the same. Sage Pro ($49) + $30 credits = $79 all-in — and you
+            also get GEO tracking, AI content, and the MCP server.
+          </p>
+        </motion.div>
+
         <p className="mt-10 text-center text-xs text-muted-foreground">
-          All plans include the MCP server, REST API, webhooks, and unlimited team members. Need
-          on-prem or 50K+ keywords?{" "}
+          All plans include the MCP server (28 tools), REST API, webhooks, and unlimited team
+          members. Need on-prem or 50K+ keywords?{" "}
           <Link href="#" className="text-emerald-300 hover:text-emerald-200 underline underline-offset-2">
             Talk to us
           </Link>
