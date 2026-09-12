@@ -1,0 +1,362 @@
+ C:\Users\jrain> cd ~
+PS C:\Users\jrain>
+PS C:\Users\jrain> # Paghimo og folder para sa project
+PS C:\Users\jrain> mkdir sage-vld
+mkdir : An item with the specified name C:\Users\jrain\sage-vld already exists.
+At line:1 char:1
++ mkdir sage-vld
++ ~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceExists: (C:\Users\jrain\sage-vld:String) [New-Item], IOException
+    + FullyQualifiedErrorId : DirectoryExist,Microsoft.PowerShell.Commands.NewItemCommand
+
+PS C:\Users\jrain> cd sage-vld
+PS C:\Users\jrain\sage-vld>
+PS C:\Users\jrain\sage-vld> # Kuhaa ang zip (adjust ang path kung lahi imong download location)
+PS C:\Users\jrain\sage-vld> Expand-Archive -Path "$env:USERPROFILE\Downloads\sage-vld-source.zip" -DestinationPath . -Force
+Expand-Archive : The path 'C:\Users\jrain\Downloads\sage-vld-source.zip' either does not exist or is not a valid file
+system path.
+At line:1 char:1
++ Expand-Archive -Path "$env:USERPROFILE\Downloads\sage-vld-source.zip" ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (C:\Users\jrain\...-vld-source.zip:String) [Expand-Archive], InvalidOpe
+   rationException
+    + FullyQualifiedErrorId : ArchiveCmdletPathNotFound,Expand-Archive
+
+PS C:\Users\jrain\sage-vld>
+PS C:\Users\jrain\sage-vld> # I-initialize ang git
+PS C:\Users\jrain\sage-vld> git init
+Reinitialized existing Git repository in C:/Users/jrain/sage-vld/.git/
+PS C:\Users\jrain\sage-vld> git branch -M main
+PS C:\Users\jrain\sage-vld> git add -A
+PS C:\Users\jrain\sage-vld>
+PS C:\Users\jrain\sage-vld> # Unang commit
+PS C:\Users\jrain\sage-vld> git commit -m "feat: Sage by VirtuaLab Digital — AI-Visibility-first SEO platform"
+On branch main
+
+Initial commit
+
+nothing to commit (create/copy files and use "git add" to track)
+PS C:\Users\jrain\sage-vld>
+PS C:\Users\jrain\sage-vld> # Idugang ang imo GitHub remote
+PS C:\Users\jrain\sage-vld> git remote add origin https://github.com/AISEO-VirtualabDigital/Sage-VLD.git
+error: remote origin already exists.
+PS C:\Users\jrain\sage-vld>
+PS C:\Users\jrain\sage-vld> # I-push sa GitHub
+PS C:\Users\jrain\sage-vld> git push -u origin main
+error: src refspec main does not match any
+error: failed to push some refs to 'https://github.com/AISEO-VirtualabDigital/Sage-VLD.git'
+PS C:\Users\jrain\sage-vld> # Lakang 1: Lakang ngadto sa folder
+PS C:\Users\jrain\sage-vld> cd D:\sage-vld
+PS D:\sage-vld>
+PS D:\sage-vld> # Lakang 2: Tan-awa kung naa ang files (optional — i-verify lang)
+PS D:\sage-vld> ls
+
+
+    Directory: D:\sage-vld
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----         9/12/2026   3:37 PM                sage-vld-source
+-a----         9/12/2026   3:34 PM         351665 sage-vld-source.zip
+-a----         9/12/2026   3:34 PM           3403 SETUP-WINDOWS.ps1
+
+
+PS D:\sage-vld>
+PS D:\sage-vld> # Lakang 3: I-initialize ang git (kung wala pa)
+PS D:\sage-vld> git init
+Initialized empty Git repository in D:/sage-vld/.git/
+PS D:\sage-vld> git branch -M main
+PS D:\sage-vld>
+PS D:\sage-vld> # Lakang 4: I-add tanan files
+PS D:\sage-vld> git add -A
+warning: in the working copy of 'SETUP-WINDOWS.ps1', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/.env.example', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/Caddyfile', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/DEPLOYMENT.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/SETUP_API_KEYS.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/bun.lock', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/components.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/eslint.config.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/next.config.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/postcss.config.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/prisma/migrations/d1_init.sql', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/prisma/schema.prisma', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/public/favicon.svg', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/public/logo.svg', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/public/manifest.webmanifest', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/public/og.svg', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/public/robots.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/sage-seo-analysis-report.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/scripts/deploy-cf.sh', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/scripts/migrate-d1.sh', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/scripts/seed.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/app/api/mcp/[tool]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/app/api/mcp/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/app/api/mcp/tools/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/app/api/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/app/api/stripe/checkout/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/app/api/stripe/portal/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/app/api/stripe/webhook/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/app/globals.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/app/layout.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/app/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/dashboard/api.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/dashboard/dashboard-app.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/dashboard/dashboard-shell.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/dashboard/hooks/use-dashboard-data.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/dashboard/views/analytics-view.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/dashboard/views/apikeys-view.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/dashboard/views/audits-view.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/dashboard/views/billing-view.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/dashboard/views/brandbrain-view.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/dashboard/views/changes-view.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/dashboard/views/citations-view.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/dashboard/views/content-view.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/dashboard/views/overview-view.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/dashboard/views/rankings-view.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/site/comparison.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/site/dashboard-preview.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/site/faq.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/site/features.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/site/final-cta.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/site/footer.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/site/header.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/site/hero.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/site/how-it-works.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/site/logo.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/site/pricing.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/site/testimonials.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/site/theme-provider.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/accordion.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/alert-dialog.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/alert.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/aspect-ratio.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/avatar.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/badge.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/breadcrumb.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/button.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/calendar.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/card.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/carousel.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/chart.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/checkbox.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/collapsible.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/command.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/context-menu.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/dialog.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/drawer.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/dropdown-menu.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/form.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/hover-card.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/input-otp.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/input.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/label.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/menubar.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/navigation-menu.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/pagination.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/popover.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/progress.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/radio-group.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/resizable.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/scroll-area.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/select.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/separator.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/sheet.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/sidebar.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/skeleton.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/slider.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/sonner.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/switch.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/table.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/tabs.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/textarea.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/toast.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/toaster.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/toggle-group.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/toggle.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/components/ui/tooltip.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/hooks/use-mobile.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/hooks/use-toast.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/lib/auth.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/lib/billing.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/lib/db.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/lib/integrations/dataforseo.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/lib/integrations/google.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/lib/integrations/llm.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/lib/mcp/auth.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/lib/mcp/content-pipeline.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/lib/mcp/registry.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/lib/mcp/tools-read.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/lib/mcp/tools-write.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/lib/mcp/tools.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/lib/mcp/types.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/src/lib/utils.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/tailwind.config.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/tsconfig.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/worklog.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sage-vld-source/wrangler.toml', LF will be replaced by CRLF the next time Git touches it
+PS D:\sage-vld>
+PS D:\sage-vld> # Lakang 5: Unang commit
+PS D:\sage-vld> git commit -m "feat: Sage by VirtuaLab Digital — AI-Visibility-first SEO platform
+>>
+>> - Marketing site (hero, features, pricing, comparison, FAQ, testimonials)
+>> - 28-tool MCP server (JSON-RPC 2.0 + REST, auth + write-guards)
+>> - Dashboard UI (10 views)
+>> - Prisma schema (16 models)
+>> - Content pipeline (De-AI humanizer + E-E-A-T/SEO/Gap scorers)
+>> - Auth (NextAuth JWT + credentials provider)
+>> - Billing (Stripe + credit ledger + BYOK pricing)
+>> - Integrations (DataForSEO, OpenAI/Anthropic, Google GSC/GA4)
+>> - Cloudflare Pages + D1 deployment ready"
+[main (root-commit) 8752403] feat: Sage by VirtuaLab Digital — AI-Visibility-first SEO platform
+ 131 files changed, 21677 insertions(+)
+ create mode 100644 SETUP-WINDOWS.ps1
+ create mode 100644 sage-vld-source.zip
+ create mode 100644 sage-vld-source/.env.example
+ create mode 100644 sage-vld-source/.gitignore
+ create mode 100644 sage-vld-source/Caddyfile
+ create mode 100644 sage-vld-source/DEPLOYMENT.md
+ create mode 100644 sage-vld-source/README.md
+ create mode 100644 sage-vld-source/SETUP_API_KEYS.md
+ create mode 100644 sage-vld-source/bun.lock
+ create mode 100644 sage-vld-source/components.json
+ create mode 100644 sage-vld-source/eslint.config.mjs
+ create mode 100644 sage-vld-source/mini-services/.gitkeep
+ create mode 100644 sage-vld-source/next.config.ts
+ create mode 100644 sage-vld-source/package.json
+ create mode 100644 sage-vld-source/postcss.config.mjs
+ create mode 100644 sage-vld-source/prisma/migrations/d1_init.sql
+ create mode 100644 sage-vld-source/prisma/schema.prisma
+ create mode 100644 sage-vld-source/public/favicon.svg
+ create mode 100644 sage-vld-source/public/logo.svg
+ create mode 100644 sage-vld-source/public/manifest.webmanifest
+ create mode 100644 sage-vld-source/public/og.svg
+ create mode 100644 sage-vld-source/public/robots.txt
+ create mode 100644 sage-vld-source/sage-seo-analysis-report.md
+ create mode 100644 sage-vld-source/scripts/deploy-cf.sh
+ create mode 100644 sage-vld-source/scripts/migrate-d1.sh
+ create mode 100644 sage-vld-source/scripts/seed.ts
+ create mode 100644 sage-vld-source/src/app/api/mcp/[tool]/route.ts
+ create mode 100644 sage-vld-source/src/app/api/mcp/route.ts
+ create mode 100644 sage-vld-source/src/app/api/mcp/tools/route.ts
+ create mode 100644 sage-vld-source/src/app/api/route.ts
+ create mode 100644 sage-vld-source/src/app/api/stripe/checkout/route.ts
+ create mode 100644 sage-vld-source/src/app/api/stripe/portal/route.ts
+ create mode 100644 sage-vld-source/src/app/api/stripe/webhook/route.ts
+ create mode 100644 sage-vld-source/src/app/globals.css
+ create mode 100644 sage-vld-source/src/app/layout.tsx
+ create mode 100644 sage-vld-source/src/app/page.tsx
+ create mode 100644 sage-vld-source/src/components/dashboard/api.ts
+ create mode 100644 sage-vld-source/src/components/dashboard/dashboard-app.tsx
+ create mode 100644 sage-vld-source/src/components/dashboard/dashboard-shell.tsx
+ create mode 100644 sage-vld-source/src/components/dashboard/hooks/use-dashboard-data.ts
+ create mode 100644 sage-vld-source/src/components/dashboard/views/analytics-view.tsx
+ create mode 100644 sage-vld-source/src/components/dashboard/views/apikeys-view.tsx
+ create mode 100644 sage-vld-source/src/components/dashboard/views/audits-view.tsx
+ create mode 100644 sage-vld-source/src/components/dashboard/views/billing-view.tsx
+ create mode 100644 sage-vld-source/src/components/dashboard/views/brandbrain-view.tsx
+ create mode 100644 sage-vld-source/src/components/dashboard/views/changes-view.tsx
+ create mode 100644 sage-vld-source/src/components/dashboard/views/citations-view.tsx
+ create mode 100644 sage-vld-source/src/components/dashboard/views/content-view.tsx
+ create mode 100644 sage-vld-source/src/components/dashboard/views/overview-view.tsx
+ create mode 100644 sage-vld-source/src/components/dashboard/views/rankings-view.tsx
+ create mode 100644 sage-vld-source/src/components/site/comparison.tsx
+ create mode 100644 sage-vld-source/src/components/site/dashboard-preview.tsx
+ create mode 100644 sage-vld-source/src/components/site/faq.tsx
+ create mode 100644 sage-vld-source/src/components/site/features.tsx
+ create mode 100644 sage-vld-source/src/components/site/final-cta.tsx
+ create mode 100644 sage-vld-source/src/components/site/footer.tsx
+ create mode 100644 sage-vld-source/src/components/site/header.tsx
+ create mode 100644 sage-vld-source/src/components/site/hero.tsx
+ create mode 100644 sage-vld-source/src/components/site/how-it-works.tsx
+ create mode 100644 sage-vld-source/src/components/site/logo.tsx
+ create mode 100644 sage-vld-source/src/components/site/pricing.tsx
+ create mode 100644 sage-vld-source/src/components/site/testimonials.tsx
+ create mode 100644 sage-vld-source/src/components/site/theme-provider.tsx
+ create mode 100644 sage-vld-source/src/components/ui/accordion.tsx
+ create mode 100644 sage-vld-source/src/components/ui/alert-dialog.tsx
+ create mode 100644 sage-vld-source/src/components/ui/alert.tsx
+ create mode 100644 sage-vld-source/src/components/ui/aspect-ratio.tsx
+ create mode 100644 sage-vld-source/src/components/ui/avatar.tsx
+ create mode 100644 sage-vld-source/src/components/ui/badge.tsx
+ create mode 100644 sage-vld-source/src/components/ui/breadcrumb.tsx
+ create mode 100644 sage-vld-source/src/components/ui/button.tsx
+ create mode 100644 sage-vld-source/src/components/ui/calendar.tsx
+ create mode 100644 sage-vld-source/src/components/ui/card.tsx
+ create mode 100644 sage-vld-source/src/components/ui/carousel.tsx
+ create mode 100644 sage-vld-source/src/components/ui/chart.tsx
+ create mode 100644 sage-vld-source/src/components/ui/checkbox.tsx
+ create mode 100644 sage-vld-source/src/components/ui/collapsible.tsx
+ create mode 100644 sage-vld-source/src/components/ui/command.tsx
+ create mode 100644 sage-vld-source/src/components/ui/context-menu.tsx
+ create mode 100644 sage-vld-source/src/components/ui/dialog.tsx
+ create mode 100644 sage-vld-source/src/components/ui/drawer.tsx
+ create mode 100644 sage-vld-source/src/components/ui/dropdown-menu.tsx
+ create mode 100644 sage-vld-source/src/components/ui/form.tsx
+ create mode 100644 sage-vld-source/src/components/ui/hover-card.tsx
+ create mode 100644 sage-vld-source/src/components/ui/input-otp.tsx
+ create mode 100644 sage-vld-source/src/components/ui/input.tsx
+ create mode 100644 sage-vld-source/src/components/ui/label.tsx
+ create mode 100644 sage-vld-source/src/components/ui/menubar.tsx
+ create mode 100644 sage-vld-source/src/components/ui/navigation-menu.tsx
+ create mode 100644 sage-vld-source/src/components/ui/pagination.tsx
+ create mode 100644 sage-vld-source/src/components/ui/popover.tsx
+ create mode 100644 sage-vld-source/src/components/ui/progress.tsx
+ create mode 100644 sage-vld-source/src/components/ui/radio-group.tsx
+ create mode 100644 sage-vld-source/src/components/ui/resizable.tsx
+ create mode 100644 sage-vld-source/src/components/ui/scroll-area.tsx
+ create mode 100644 sage-vld-source/src/components/ui/select.tsx
+ create mode 100644 sage-vld-source/src/components/ui/separator.tsx
+ create mode 100644 sage-vld-source/src/components/ui/sheet.tsx
+ create mode 100644 sage-vld-source/src/components/ui/sidebar.tsx
+ create mode 100644 sage-vld-source/src/components/ui/skeleton.tsx
+ create mode 100644 sage-vld-source/src/components/ui/slider.tsx
+ create mode 100644 sage-vld-source/src/components/ui/sonner.tsx
+ create mode 100644 sage-vld-source/src/components/ui/switch.tsx
+ create mode 100644 sage-vld-source/src/components/ui/table.tsx
+ create mode 100644 sage-vld-source/src/components/ui/tabs.tsx
+ create mode 100644 sage-vld-source/src/components/ui/textarea.tsx
+ create mode 100644 sage-vld-source/src/components/ui/toast.tsx
+ create mode 100644 sage-vld-source/src/components/ui/toaster.tsx
+ create mode 100644 sage-vld-source/src/components/ui/toggle-group.tsx
+ create mode 100644 sage-vld-source/src/components/ui/toggle.tsx
+ create mode 100644 sage-vld-source/src/components/ui/tooltip.tsx
+ create mode 100644 sage-vld-source/src/hooks/use-mobile.ts
+ create mode 100644 sage-vld-source/src/hooks/use-toast.ts
+ create mode 100644 sage-vld-source/src/lib/auth.ts
+ create mode 100644 sage-vld-source/src/lib/billing.ts
+ create mode 100644 sage-vld-source/src/lib/db.ts
+ create mode 100644 sage-vld-source/src/lib/integrations/dataforseo.ts
+ create mode 100644 sage-vld-source/src/lib/integrations/google.ts
+ create mode 100644 sage-vld-source/src/lib/integrations/llm.ts
+ create mode 100644 sage-vld-source/src/lib/mcp/auth.ts
+ create mode 100644 sage-vld-source/src/lib/mcp/content-pipeline.ts
+ create mode 100644 sage-vld-source/src/lib/mcp/registry.ts
+ create mode 100644 sage-vld-source/src/lib/mcp/tools-read.ts
+ create mode 100644 sage-vld-source/src/lib/mcp/tools-write.ts
+ create mode 100644 sage-vld-source/src/lib/mcp/tools.ts
+ create mode 100644 sage-vld-source/src/lib/mcp/types.ts
+ create mode 100644 sage-vld-source/src/lib/utils.ts
+ create mode 100644 sage-vld-source/tailwind.config.ts
+ create mode 100644 sage-vld-source/tsconfig.json
+ create mode 100644 sage-vld-source/worklog.md
+ create mode 100644 sage-vld-source/wrangler.toml
+PS D:\sage-vld>
+PS D:\sage-vld> # Lakang 6: Idugang ang imo GitHub remote
+PS D:\sage-vld> git remote add origin https://github.com/AISEO-VirtualabDigital/Sage-VLD.git
+PS D:\sage-vld>
+PS D:\sage-vld> # Lakang 7: I-push sa GitHub!
+PS D:\sage-vld> git push -u origin main
+To https://github.com/AISEO-VirtualabDigital/Sage-VLD.git
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'https://github.com/AISEO-VirtualabDigital/Sage-VLD.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+PS D:\sage-vld>
